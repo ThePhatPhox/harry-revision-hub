@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Revise">
+<title>Harry's Revision Hub v2.0</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="icon" type="image/svg+xml" href="icon-192.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-base: #0a0e1a;
+  --bg-panel: #131826;
+  --bg-elevated: #1a2033;
+  --bg-hover: #232a40;
+  --border: #2a3147;
+  --border-bright: #3d4566;
+  --text-primary: #e8ecf5;
+  --text-secondary: #9aa3b8;
+  --text-muted: #5e6680;
+  --cs: #00d9a3;
+  --science: #7c3aed;
+  --geography: #ff8c42;
+  --maths: #ef4444;
+  --english: #38bdf8;
+  --spanish: #facc15;
+  --rs: #f472b6;
+  --history: #a78bfa;
+  --music: #94a3b8;
+  --accent: #00d9a3;
+  --warning: #facc15;
+  --urgent: #ef4444;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.6);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  line-height: 1.55;
+  min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom);
+  background-image:
+    radial-gradient(circle at 20% 20%, rgba(124,58,237,0.08) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0,217,163,0.06) 0%, transparent 50%);
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+header {
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,14,26,0.85);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding-top: env(safe-area-inset-top);
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.brand { display: flex; align-items: baseline; gap: 0.75rem; }
+.brand-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.brand-title::before { content: '> '; color: var(--accent); }
+.version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.header-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.8rem;
+  font-family: 'JetBrains Mono', monospace;
+  flex-wrap: wrap;
+}
+.header-stat { color: var(--text-secondary); }
+.header-stat strong { color: var(--text-primary); }
+
+main { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+
+.hero {
+  background: linear-gradient(135deg, var(--bg-panel) 0%, var(--bg-elevated) 100%);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--cs), var(--science), var(--geography), var(--maths), var(--english));
+}
+.hero-grid { display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: center; }
+.hero-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 0.6rem;
+}
+.hero-title { font-size: 1.85rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.5rem; }
+.hero-subtitle { color: var(--text-secondary); font-size: 0.95rem; }
+.countdown { text-align: right; }
+.countdown-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 3.8rem; font-weight: 800;
+  color: var(--accent); line-height: 1; letter-spacing: -0.05em;
+  text-shadow: 0 0 32px rgba(0,217,163,0.4);
+}
+.countdown-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.15em; margin-top: 0.25rem;
+}
+.countdown.warning .countdown-number { color: var(--warning); text-shadow: 0 0 32px rgba(250,204,21,0.4); }
+.countdown.urgent .countdown-number { color: var(--urgent); text-shadow: 0 0 32px rgba(239,68,68,0.4); }
+
+.phase-bar {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.phase-info { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.phase-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700;
+  padding: 0.3rem 0.65rem; border-radius: 6px;
+  background: var(--accent); color: var(--bg-base);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.phase-badge.phase-2 { background: var(--warning); }
+.phase-badge.phase-3 { background: var(--urgent); color: white; }
+.phase-text { font-size: 0.9rem; color: var(--text-secondary); }
+.phase-text strong { color: var(--text-primary); }
+.phase-progress { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-muted); }
+
+/* Reschedule notification */
+.reschedule-notice {
+  background: linear-gradient(135deg, rgba(250,204,21,0.1) 0%, rgba(239,68,68,0.05) 100%);
+  border: 1px solid rgba(250,204,21,0.3);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.reschedule-notice-text { font-size: 0.9rem; color: var(--text-primary); flex: 1; min-width: 200px; }
+.reschedule-notice-text strong { color: var(--warning); }
+.reschedule-btn {
+  background: var(--warning);
+  color: var(--bg-base);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.reschedule-btn:hover { opacity: 0.9; }
+
+h2 {
+  font-size: 1.35rem; font-weight: 700;
+  margin: 2rem 0 1rem; letter-spacing: -0.02em;
+  display: flex; align-items: center; gap: 0.65rem;
+}
+h2::before {
+  content: ''; display: inline-block;
+  width: 4px; height: 1.35rem;
+  background: var(--accent); border-radius: 2px;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+.stat-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.stat-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.35rem;
+}
+.stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem; font-weight: 800; color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+.stat-sub { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.2rem; }
+
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+.slot-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem;
+  position: relative;
+  overflow: hidden;
+}
+.slot-card::before {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px;
+  background: var(--subject-color, var(--accent));
+}
+.slot-card.rescheduled::after {
+  content: 'CARRIED OVER';
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 700;
+  color: var(--warning); letter-spacing: 0.05em;
+  background: rgba(250,204,21,0.1);
+  padding: 0.2rem 0.4rem; border-radius: 4px;
+  border: 1px solid rgba(250,204,21,0.3);
+}
+.slot-card.overflow::after {
+  content: 'EXTRA';
+  position: absolute; top: 0.6rem; right: 0.6rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 700;
+  color: var(--science); letter-spacing: 0.05em;
+  background: rgba(124,58,237,0.1);
+  padding: 0.2rem 0.4rem; border-radius: 4px;
+  border: 1px solid rgba(124,58,237,0.3);
+}
+.slot-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.4rem;
+}
+.slot-subject { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.3rem; color: var(--subject-color, var(--text-primary)); }
+.slot-focus { font-size: 0.85rem; color: var(--text-secondary); }
+.slot-done-btn {
+  margin-top: 0.75rem;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 0.4rem 0.85rem;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.slot-done-btn:hover { border-color: var(--accent); color: var(--accent); }
+.slot-done-btn.done { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+
+.subjects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.subject-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.25rem;
+  transition: all 0.25s ease;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.subject-card::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--subject-color);
+}
+.subject-card:active { transform: scale(0.98); }
+.subject-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.85rem; }
+.subject-name { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em; color: var(--subject-color); }
+.subject-priority {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 700;
+  padding: 0.2rem 0.45rem; border-radius: 4px;
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+.priority-critical { background: rgba(239,68,68,0.15); color: var(--urgent); border: 1px solid rgba(239,68,68,0.3); }
+.priority-high { background: rgba(250,204,21,0.15); color: var(--warning); border: 1px solid rgba(250,204,21,0.3); }
+.priority-medium { background: rgba(0,217,163,0.15); color: var(--accent); border: 1px solid rgba(0,217,163,0.3); }
+.priority-light { background: rgba(148,163,184,0.15); color: var(--text-secondary); border: 1px solid rgba(148,163,184,0.3); }
+
+.subject-time { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 0.65rem; }
+.subject-meta { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem; line-height: 1.45; }
+.subject-progress { margin-bottom: 0.85rem; }
+.progress-label {
+  display: flex; justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.35rem;
+}
+.progress-bar { height: 6px; background: var(--bg-elevated); border-radius: 3px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--subject-color); transition: width 0.3s ease; }
+.btn-open {
+  width: 100%;
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 0.55rem 1rem; border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem; font-weight: 500;
+  cursor: pointer; text-align: center;
+}
+
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1rem;
+  padding-top: max(1rem, env(safe-area-inset-top));
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
+.modal-overlay.active { display: flex; }
+.modal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  max-width: 800px; width: 100%;
+  margin: 1rem auto; position: relative;
+  box-shadow: var(--shadow-lg);
+}
+.modal::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: var(--subject-color, var(--accent));
+  border-radius: 16px 16px 0 0;
+}
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem;
+}
+.modal-title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; color: var(--subject-color, var(--text-primary)); }
+.modal-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.3rem; }
+.modal-close {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  width: 36px; height: 36px;
+  border-radius: 8px; cursor: pointer;
+  font-size: 1.25rem; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal-body { padding: 1.25rem 1.5rem 1.75rem; }
+
+.section-h {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.2em;
+  margin: 1.25rem 0 0.65rem;
+}
+.section-h:first-child { margin-top: 0; }
+
+.topics-list { list-style: none; display: grid; gap: 0.4rem; }
+.topic-item {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.7rem 0.9rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.topic-checkbox {
+  width: 18px; height: 18px;
+  border: 2px solid var(--border-bright);
+  border-radius: 4px; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: transparent;
+}
+.topic-checkbox.checked { background: var(--subject-color, var(--accent)); border-color: var(--subject-color, var(--accent)); }
+.topic-checkbox.checked::after { content: '✓'; color: var(--bg-base); font-weight: 700; font-size: 0.85rem; }
+.topic-label { flex: 1; font-size: 0.9rem; color: var(--text-primary); }
+.topic-checkbox.checked + .topic-label { color: var(--text-muted); text-decoration: line-through; }
+
+.resources-list { display: grid; gap: 0.4rem; }
+.resource-link {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.8rem 0.95rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  text-decoration: none; color: var(--text-primary);
+}
+.resource-info { flex: 1; }
+.resource-name { font-weight: 600; font-size: 0.9rem; }
+.resource-desc { font-size: 0.75rem; color: var(--text-secondary); margin-top: 0.15rem; }
+.resource-arrow { font-family: 'JetBrains Mono', monospace; color: var(--text-muted); font-size: 1rem; }
+
+.teacher-note {
+  background: var(--bg-elevated);
+  border-left: 3px solid var(--subject-color, var(--accent));
+  padding: 0.9rem 1.15rem;
+  border-radius: 0 8px 8px 0;
+  font-style: italic; font-size: 0.85rem; color: var(--text-secondary);
+}
+.teacher-note::before { content: 'Teacher (T5): '; font-style: normal; font-weight: 600; color: var(--subject-color, var(--text-primary)); }
+
+.exam-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+.exam-stat {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.65rem 0.85rem;
+}
+.exam-stat-label { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.2rem; }
+.exam-stat-value { font-weight: 700; font-size: 0.88rem; color: var(--text-primary); }
+
+.schedule-table {
+  width: 100%;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 1rem;
+}
+.schedule-table th, .schedule-table td {
+  padding: 0.7rem 0.85rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+  vertical-align: top;
+}
+.schedule-table th {
+  background: var(--bg-elevated);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-secondary);
+}
+.schedule-table tbody tr:last-child td { border-bottom: none; }
+.schedule-table .day-cell { font-family: 'JetBrains Mono', monospace; font-weight: 700; color: var(--text-primary); width: 70px; }
+.schedule-table .today-row { background: rgba(0,217,163,0.05); }
+.schedule-table .today-row .day-cell { color: var(--accent); }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+.tool-button {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.85rem 1.1rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  display: flex; align-items: center; gap: 0.7rem;
+}
+.tool-icon { font-family: 'JetBrains Mono', monospace; font-weight: 800; color: var(--accent); font-size: 1.05rem; }
+.tool-name { font-size: 0.85rem; font-weight: 600; }
+
+.install-banner {
+  display: none;
+  background: var(--bg-panel);
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  padding: 0.85rem 1.15rem;
+  margin-bottom: 1.5rem;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.install-banner.show { display: flex; }
+.install-banner-text { font-size: 0.85rem; color: var(--text-secondary); flex: 1; min-width: 200px; }
+.install-banner-text strong { color: var(--accent); }
+.install-btn {
+  background: var(--accent);
+  color: var(--bg-base);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.install-btn.dismiss { background: transparent; color: var(--text-muted); border: 1px solid var(--border); }
+
+footer {
+  border-top: 1px solid var(--border);
+  padding: 1.5rem; text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem; color: var(--text-muted);
+}
+footer a { color: var(--text-secondary); text-decoration: none; }
+
+@media (max-width: 640px) {
+  main { padding: 1rem; }
+  .hero { padding: 1.5rem 1.25rem; }
+  .hero-grid { grid-template-columns: 1fr; }
+  .countdown { text-align: left; }
+  .countdown-number { font-size: 3rem; }
+  .hero-title { font-size: 1.45rem; }
+  .header-stats { width: 100%; justify-content: flex-start; gap: 0.85rem; }
+  .header-stat { font-size: 0.7rem; }
+  .subjects-grid { grid-template-columns: 1fr; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  h2 { font-size: 1.15rem; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.subject-card, .slot-card, .stat-card { animation: fadeIn 0.4s ease-out backwards; }
+.subject-card:nth-child(1) { animation-delay: 0.05s; }
+.subject-card:nth-child(2) { animation-delay: 0.1s; }
+.subject-card:nth-child(3) { animation-delay: 0.15s; }
+.subject-card:nth-child(4) { animation-delay: 0.2s; }
+.subject-card:nth-child(5) { animation-delay: 0.25s; }
+.subject-card:nth-child(6) { animation-delay: 0.3s; }
+.subject-card:nth-child(7) { animation-delay: 0.35s; }
+.subject-card:nth-child(8) { animation-delay: 0.4s; }
+.subject-card:nth-child(9) { animation-delay: 0.45s; }
+
+@media (display-mode: standalone) {
+  header { padding-top: max(env(safe-area-inset-top), 0.5rem); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-title">harry.revision</div>
+      <span class="version">v2.0</span>
+    </div>
+    <div class="header-stats">
+      <span class="header-stat">EOY · <strong>29 Jun</strong></span>
+      <span class="header-stat">Ph <strong id="phase-num">1</strong></span>
+      <span class="header-stat">🔥 <strong id="streak-count">0</strong>d</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- Install banner -->
+  <div class="install-banner" id="install-banner">
+    <div class="install-banner-text">
+      <strong>Install this app</strong> on your home screen for quick access offline.
+    </div>
+    <button class="install-btn dismiss" onclick="dismissInstall()">Later</button>
+    <button class="install-btn" id="install-btn" onclick="triggerInstall()">Install</button>
+  </div>
+
+  <!-- Hero countdown -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-label">Year 9 End of Year Assessments</div>
+        <h1 class="hero-title" id="hero-greeting">Hey Harry — let's go.</h1>
+        <p class="hero-subtitle" id="hero-sub">Stay sharp. Stay consistent. Smash it.</p>
+      </div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-number" id="days-left">45</div>
+        <div class="countdown-label">days until</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reschedule notification (shown only when items carried over) -->
+  <div class="reschedule-notice" id="reschedule-notice" style="display:none;">
+    <div class="reschedule-notice-text">
+      <strong>📋 Missed work has been rescheduled.</strong>
+      <span id="reschedule-detail">2 slots carried over to this week.</span>
+    </div>
+    <button class="reschedule-btn" onclick="dismissRescheduleNotice()">Got it</button>
+  </div>
+
+  <!-- Phase indicator -->
+  <div class="phase-bar">
+    <div class="phase-info">
+      <span class="phase-badge" id="phase-badge">Phase 1: Ramp-in</span>
+      <span class="phase-text" id="phase-desc"><strong>1 hour weekdays</strong>, 2 hours weekend days</span>
+    </div>
+    <div class="phase-progress" id="phase-progress">Week 1 of 6</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">Today</div>
+      <div class="stat-value" id="today-slots">2</div>
+      <div class="stat-sub" id="today-slots-sub">slots planned</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">This Week</div>
+      <div class="stat-value" id="week-hours">9h</div>
+      <div class="stat-sub">target</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Topics</div>
+      <div class="stat-value" id="topics-done">0</div>
+      <div class="stat-sub" id="topics-total">of 0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Phase</div>
+      <div class="stat-value mono" id="phase-name">RAMP</div>
+      <div class="stat-sub" id="phase-dates">18-31 May</div>
+    </div>
+  </div>
+
+  <!-- Today's plan -->
+  <h2>Today's Plan</h2>
+  <div class="today-grid" id="today-grid"></div>
+
+  <!-- Quick tools -->
+  <h2>Quick Access</h2>
+  <div class="tools-grid">
+    <a href="https://claude.ai/new" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">[~]</span>
+      <span class="tool-name">Ask Claude</span>
+    </a>
+    <a href="https://www.bbc.co.uk/bitesize/levels/zdhs34j" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">BBC</span>
+      <span class="tool-name">BBC Bitesize</span>
+    </a>
+    <a href="https://www.drfrostmaths.com" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">∑</span>
+      <span class="tool-name">DrFrost</span>
+    </a>
+    <a href="https://app.senecalearning.com" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">📚</span>
+      <span class="tool-name">Seneca</span>
+    </a>
+    <a href="https://quizlet.com" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">⚡</span>
+      <span class="tool-name">Quizlet</span>
+    </a>
+    <a href="https://thephatphox.github.io/HJAHGCSE/" target="_blank" rel="noopener" class="tool-button">
+      <span class="tool-icon">{}</span>
+      <span class="tool-name">CS Study Hub</span>
+    </a>
+  </div>
+
+  <!-- Subjects -->
+  <h2>Subjects</h2>
+  <div class="subjects-grid" id="subjects-grid"></div>
+
+  <!-- Weekly schedule -->
+  <h2>This Week</h2>
+  <div style="overflow-x: auto;">
+    <table class="schedule-table" id="schedule-table"></table>
+  </div>
+
+</main>
+
+<footer>
+  Built for Harry · v2.0 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal" id="modal" style="--subject-color: var(--accent);">
+    <div class="modal-header">
+      <div>
+        <h2 class="modal-title" id="modal-title" style="margin:0; padding:0;">Subject</h2>
+        <div class="modal-subtitle" id="modal-subtitle">Details</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+// ============ CONSTANTS ============
+
+const EXAM_START = new Date('2026-06-29');
+const PHASE_1_END = new Date('2026-05-31');
+const PHASE_2_END = new Date('2026-06-28');
+const PLAN_START = new Date('2026-05-18');
+
+function todayDate() {
+  const d = new Date();
+  d.setHours(0,0,0,0);
+  return d;
+}
+
+function dateKey(d) {
+  return d.toISOString().split('T')[0];
+}
+
+function addDays(d, n) {
+  const r = new Date(d);
+  r.setDate(r.getDate() + n);
+  return r;
+}
+
+function getPhaseForDate(d) {
+  if (d <= PHASE_1_END) return 1;
+  if (d <= PHASE_2_END) return 2;
+  return 3;
+}
+
+function getDaysUntilExams() {
+  return Math.max(0, Math.ceil((EXAM_START - todayDate()) / 86400000));
+}
+
+function getWeekNumber() {
+  const diff = Math.floor((todayDate() - PLAN_START) / 86400000);
+  return Math.max(1, Math.min(7, Math.floor(diff / 7) + 1));
+}
+
+// dayIndex: 0=Mon..6=Sun
+function getDayIndex(d) {
+  const day = d.getDay();
+  return day === 0 ? 6 : day - 1;
+}
+
+// ============ SUBJECT DATA ============
+// Priority weights: lower number = higher priority for rescheduling
+const SUBJECTS = {
+  cs: {
+    name: 'Computer Science', color: 'var(--cs)', priority: 'critical', priorityLabel: 'Critical',
+    rescheduleWeight: 1,
+    weeklyTime: '3 hrs', weeklyTimeP2: '~3.5 hrs',
+    summary: 'Chosen GCSE (OCR J277). Currently target S4 — needs to dramatically exceed this. Building strong foundation for Y10.',
+    teacherNote: 'Steady progress. Basic Python (T2) and binary number system (T3) developed soundly. Currently working on cyber security. Benefits from step-by-step guidance but beginning to show more independence.',
+    examInfo: { 'GCSE Board': 'OCR J277', 'Likely Y9 topics': 'Python, Binary, Cyber Security', 'Format': 'Awaiting school', 'Y10 onwards': '2 papers, 1h30 each' },
+    topics: [
+      'Python: variables and data types',
+      'Python: input/output and casting',
+      'Python: if/elif/else statements',
+      'Python: while and for loops',
+      'Python: code tracing practice',
+      'Binary: place values (128-1)',
+      'Binary: decimal ↔ binary conversion',
+      'Binary: addition with overflow',
+      'Binary: binary shifts (×2, ÷2)',
+      'Hexadecimal: hex ↔ binary ↔ decimal',
+      'Character encoding: ASCII and Unicode',
+      'Cyber security: malware types',
+      'Cyber security: social engineering',
+      'Cyber security: protection methods',
+      'Cyber security: UK laws (CMA, GDPR)'
+    ],
+    resources: [
+      { name: "Harry's Study Hub", desc: 'Your custom revision app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+      { name: 'BBC Bitesize KS3 Computing', desc: 'Topic explanations + activities', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+      { name: 'CS GCSE Guru', desc: 'Beyond KS3, good for stretch', url: 'https://www.computerscience.gcse.guru' },
+      { name: 'Isaac Computer Science', desc: 'GCSE/A-Level stretch', url: 'https://isaaccomputerscience.org' },
+      { name: '101 Computing', desc: 'Programming challenges', url: 'https://www.101computing.net' },
+      { name: 'Python Tutor', desc: 'Visualise code execution', url: 'https://pythontutor.com' },
+      { name: 'CSNewbs', desc: 'Clear KS3/GCSE explanations', url: 'https://www.csnewbs.com' },
+      { name: 'Craig n Dave', desc: 'OCR J277 video tutorials', url: 'https://student.craigndave.org' }
+    ]
+  },
+  science: {
+    name: 'Triple Science', color: 'var(--science)', priority: 'critical', priorityLabel: 'Critical',
+    rescheduleWeight: 1,
+    weeklyTime: '2 hrs', weeklyTimeP2: '~2 hrs',
+    summary: 'Above target. Results determine triple vs combined pathway. 3 papers: Biology, Chemistry, Physics (40 marks / 40 min each).',
+    teacherNote: 'A lively and motivated student who handles Higher-tier assessments well, though confidence sometimes wanes. Focus on refining exam technique, particularly conciseness of responses. Complete extra Educake questions to strengthen long-term memory.',
+    examInfo: { 'Format': '3 papers (Bio, Chem, Phys)', 'Each': '40 marks · 40 mins', 'Topics': '9 total', 'Pathway': 'Triple/combined' },
+    topics: [
+      'BIO: Genes, evolution and inheritance',
+      'BIO: Cell biology (B1)',
+      'BIO: Organisation (B2)',
+      'CHEM: Periodic Table and Atomic structure (C1)',
+      'CHEM: Chemical bonding (C2)',
+      'PHYS: Magnetism and electromagnetism',
+      'PHYS: Energy (P1)',
+      'PHYS: Particle model of matter (P3)',
+      'PHYS: Atoms and radiation (P4)'
+    ],
+    resources: [
+      { name: 'Seneca Learning', desc: 'Free, interactive (school recommended)', url: 'https://app.senecalearning.com' },
+      { name: 'Educake', desc: 'Extra questions (teacher recommendation)', url: 'https://www.educake.co.uk' },
+      { name: 'BBC Bitesize: Cell Biology', desc: 'B1', url: 'https://www.bbc.co.uk/bitesize/topics/zb739j6' },
+      { name: 'BBC Bitesize: Periodic Table', desc: 'C1', url: 'https://www.bbc.co.uk/bitesize/topics/zwsfgwx' },
+      { name: 'BBC Bitesize: Energy', desc: 'P1', url: 'https://www.bbc.co.uk/bitesize/topics/zgy39j6' },
+      { name: 'BBC Bitesize: Organisation', desc: 'B2', url: 'https://www.bbc.co.uk/bitesize/topics/z9q7vk7' },
+      { name: 'BBC Bitesize: Chemical Bonding', desc: 'C2', url: 'https://www.bbc.co.uk/bitesize/topics/zypsgwx' },
+      { name: 'BBC Bitesize: Particle Model', desc: 'P3', url: 'https://www.bbc.co.uk/bitesize/topics/zsfgrj6' },
+      { name: 'BBC Bitesize: Atoms and Radiation', desc: 'P4', url: 'https://www.bbc.co.uk/bitesize/topics/zsjwbqt' },
+      { name: 'FreeScienceLessons (YouTube)', desc: 'High quality videos', url: 'https://www.youtube.com/@freesciencelessons' }
+    ]
+  },
+  geography: {
+    name: 'Geography', color: 'var(--geography)', priority: 'critical', priorityLabel: 'Critical',
+    rescheduleWeight: 2,
+    weeklyTime: '1h 45m', weeklyTimeP2: '~2 hrs',
+    summary: 'Chosen GCSE but BELOW target. Wide content (7+ topics). Needs disciplined coverage and case study mastery.',
+    teacherNote: 'Currently working below the expected level. Works well but can become distracted. Practise geographical skills on the Turing House School website, especially data interpretation and structured written responses.',
+    examInfo: { 'Format': '1 paper', 'Marks': '45', 'Topics': '7+ areas', 'Status': 'Below target' },
+    topics: [
+      'Population', 'Overpopulation', 'Challenges of managing population',
+      'Hazards: distribution of earthquakes and volcanoes',
+      'Plate boundaries', 'Earthquake Case Study – Haiti 2010',
+      'Glaciation: key terms', 'Glacial landforms', 'Glacial processes',
+      'Earning a living: employment sectors',
+      'Changes in employment structure', 'Doncaster case study',
+      'UK Resources: key terms and global distribution',
+      'Food: food miles and production',
+      'Africa: causes of underdevelopment'
+    ],
+    resources: [
+      { name: 'BBC Bitesize: Population', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zw3pb82' },
+      { name: 'Internet Geography: Haiti', desc: 'Case study', url: 'https://www.internetgeography.net/topics/haiti-earthquake-2010/' },
+      { name: 'BBC Bitesize: Plate Margins', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zycb9qt/revision/1' },
+      { name: 'BBC Bitesize: Glacial Processes', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zsm6fg8/revision/1' },
+      { name: 'BBC Bitesize: Types of Industry', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zkhrhyc' },
+      { name: 'Internet Geography: Food Miles', desc: 'Local sourcing', url: 'https://www.internetgeography.net/topics/food-miles/' },
+      { name: 'Internet Geography', desc: 'Topic index', url: 'https://www.internetgeography.net' }
+    ]
+  },
+  maths: {
+    name: 'Mathematics', color: 'var(--maths)', priority: 'high', priorityLabel: 'Stretch',
+    rescheduleWeight: 3,
+    weeklyTime: '1 hr', weeklyTimeP2: '1.5 hrs',
+    summary: 'Above target. Higher tier confirmed. Goal: AQA Level 2 Further Maths positioning. Focus on algebraic reasoning.',
+    teacherNote: 'Excellent attitude, working above target. Attempt Parallel online tasks released weekly. Revisit DrFrostMaths course page. Attempt exam-level questions for GCSE preparation.',
+    examInfo: { 'Format': '2 papers', 'Non-calc': '50 mins', 'Calc': '50 mins', 'Tier': 'Higher', 'Target qual': 'AQA L2 Further Maths' },
+    topics: [
+      'Number: surds and indices', 'Algebra: factorising quadratics',
+      'Algebra: simultaneous equations', 'Algebra: rearranging formulas',
+      'Algebra: solving inequalities', 'Geometry: angle facts and proofs',
+      'Geometry: Pythagoras and trigonometry', 'Ratio, proportion and rates of change',
+      'Probability: tree diagrams', 'Statistics: averages and spread',
+      'Functions and graphs', 'Sequences (linear and quadratic)',
+      'Vectors (intro)', 'Circle theorems (intro)',
+      'Problem solving: Parallel weekly tasks'
+    ],
+    resources: [
+      { name: 'DrFrostMaths', desc: 'Main school resource', url: 'https://www.drfrostmaths.com' },
+      { name: 'Parallel Maths', desc: 'Weekly problem-solving', url: 'https://parallel.org.uk' },
+      { name: 'Corbett Maths', desc: 'Topic videos', url: 'https://corbettmaths.com' },
+      { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+      { name: 'Mr Barton: AQA L2 Further Maths', desc: 'Forward planning', url: 'https://www.mrbartonmaths.com/exams/aqa-level-2-certificate-in-further-mathematics/' },
+      { name: 'Algebra Power-up (YouTube)', desc: 'School recommended', url: 'https://youtu.be/OxNSxvJb6fs' }
+    ]
+  },
+  english: {
+    name: 'English', color: 'var(--english)', priority: 'medium', priorityLabel: 'Core',
+    rescheduleWeight: 4,
+    weeklyTime: '30 min', weeklyTimeP2: '1 hr',
+    summary: 'On track at A grade. Reading + creative writing paper across a full double lesson.',
+    teacherNote: 'Good term, positive attitude. Works hard on written tasks. To improve: develop single-word analysis and explore writers\' intentions in more depth.',
+    examInfo: { 'Format': '1 paper, 2 sections', 'Section 1': 'Reading', 'Section 2': 'Creative writing', 'Length': 'Double lesson' },
+    topics: [
+      'Reading: making inferences', 'Reading: analysing language techniques',
+      'Reading: analysing structure', 'Reading: explaining effects on readers',
+      'Reading: evaluating texts', 'Writing: planning and structuring',
+      'Writing: techniques to influence reader', 'Writing: precise word choices',
+      'Writing: accurate punctuation', 'Writing: proofreading and editing'
+    ],
+    resources: [
+      { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+      { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+      { name: 'Sparx Reading', desc: 'School reading platform', url: 'https://www.sparxreading.com' },
+      { name: 'Mr Bruff (YouTube)', desc: 'Analysis technique videos', url: 'https://www.youtube.com/@mrbruff' }
+    ]
+  },
+  spanish: {
+    name: 'Spanish', color: 'var(--spanish)', priority: 'medium', priorityLabel: 'Maintain',
+    rescheduleWeight: 4,
+    weeklyTime: '30 min', weeklyTimeP2: '1 hr',
+    summary: 'Above+ target. Strong A grade. Viva Edexcel GCSE Modules 1-3. Reading, listening and writing.',
+    teacherNote: 'Excellent student, high engagement and enthusiasm. Very strong grasp of vocabulary and grammar. Revise all vocabulary from GCSE modules 1-3.',
+    examInfo: { 'Format': 'Reading, listening, writing', 'M1': 'Holidays', 'M2': 'School', 'M3': 'Family/tech', 'Writing': '3 tenses + opinions' },
+    topics: [
+      'Module 1: Holiday vocabulary', 'Module 1: Past tense (preterite)',
+      'Module 2: School subjects and opinions', 'Module 2: Daily routine',
+      'Module 3: Family vocabulary', 'Module 3: Friendship vocabulary',
+      'Module 3: Technology vocabulary', 'Module 3: Reading habits',
+      'Grammar: Present tense', 'Grammar: Preterite tense',
+      'Grammar: Near future (ir a + infinitive)', 'Grammar: Opinions with reasons',
+      'Skill: Photo description structure'
+    ],
+    resources: [
+      { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' },
+      { name: 'Quizlet: Viva Module 1', desc: 'Holidays flashcards', url: 'https://quizlet.com/search?query=viva+module+1+las+vacaciones' },
+      { name: 'Quizlet: Viva Module 2', desc: 'School flashcards', url: 'https://quizlet.com/search?query=viva+module+2+mi+vida' },
+      { name: 'Quizlet: Viva Module 3', desc: 'Family/tech', url: 'https://quizlet.com/search?query=viva+module+3+mi+gente' },
+      { name: 'BBC Bitesize: Family Spanish', desc: 'Module 3', url: 'https://www.bbc.co.uk/bitesize/topics/zxdvxyc' },
+      { name: 'Blooket', desc: 'Gamified vocabulary', url: 'https://blooket.com' }
+    ]
+  },
+  rs: {
+    name: 'Religious Studies', color: 'var(--rs)', priority: 'medium', priorityLabel: 'Y10 Exam',
+    rescheduleWeight: 5,
+    weeklyTime: '20 min', weeklyTimeP2: '30 min',
+    summary: 'Real GCSE — sat in Year 10. AQA 8062 spec. Christianity unit assessed in EOY.',
+    teacherNote: 'Good commitment. Positive class participation, written work generally well organised. To develop: include more detailed examples and evidence to strengthen explanations.',
+    examInfo: { 'Topic': 'Christianity', 'Format': '5 questions', 'Marks': '1+2+4+5+12', 'Total': '24' },
+    topics: [
+      'Nature of God: omnipotent, omniscient, benevolent',
+      'The Trinity', 'Creation: Genesis 1', 'The Incarnation',
+      'The crucifixion and resurrection', 'Salvation: atonement and grace',
+      'Worship: liturgical, non-liturgical, private', 'Prayer',
+      'Sacraments: baptism and eucharist', 'Pilgrimage: Lourdes and Iona',
+      'Christmas and Easter celebrations', 'The role of the church'
+    ],
+    resources: [
+      { name: 'Bromcom Knowledge Organiser', desc: 'School-provided', url: '#' },
+      { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+      { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+    ]
+  },
+  history: {
+    name: 'History', color: 'var(--history)', priority: 'medium', priorityLabel: 'Light',
+    rescheduleWeight: 6,
+    weeklyTime: '20 min', weeklyTimeP2: '30 min',
+    summary: 'Solid B/A. Topic is the early Cold War. 40-min paper.',
+    teacherNote: 'Good knowledge of twentieth-century history. To progress: take more active role, contribute more regularly, show greater independence.',
+    examInfo: { 'Format': '40-min paper', 'Q1': 'Explain consequence ×2', 'Q2': 'Analytical narrative', 'Q3': 'Importance of event' },
+    topics: [
+      'The Grand Alliance', 'Tehran, Yalta and Potsdam conferences',
+      'Development of the atomic bomb', 'Long and Novikov telegrams',
+      'Soviet satellite states in Eastern Europe',
+      'Truman Doctrine and Marshall Plan',
+      'Cominform (1947) and Comecon (1949)',
+      'Berlin: division into zones', 'Berlin Crisis 1948-49',
+      'Formation of FRG and GDR', 'The arms race',
+      'NATO and Warsaw Pact', 'Hungarian Uprising'
+    ],
+    resources: [
+      { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+      { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+    ]
+  },
+  music: {
+    name: 'Music', color: 'var(--music)', priority: 'light', priorityLabel: 'Light',
+    rescheduleWeight: 7,
+    weeklyTime: '15 min', weeklyTimeP2: '15 min',
+    summary: 'Below target but holistic grading. Online listening quiz is main piece.',
+    teacherNote: 'Working below target. Satisfactory attitude — benefit from more effort. Use feedback to improve performances and compositions.',
+    examInfo: { 'Format': 'Online listening quiz', 'Type': 'Multiple choice', 'Based on': 'Recorded extracts' },
+    topics: [
+      'Musical elements vocabulary', 'Texture (Pachelbel\'s Canon)',
+      'EDM composition', 'Melody and harmony in film music',
+      'Game music composition', 'Recognising instruments by ear',
+      'Tempo, dynamics, articulation'
+    ],
+    resources: [
+      { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' }
+    ]
+  }
+};
+
+// ============ BASE SCHEDULE TEMPLATES ============
+// Each block: { subject, focus, mins }
+
+const SCHEDULE_P1 = {
+  0: [ // Mon
+    { subject: 'cs', focus: 'Diagnostic / weak topics', mins: 30 },
+    { subject: 'geography', focus: 'Population', mins: 30 }
+  ],
+  1: [ // Tue
+    { subject: 'science', focus: 'Bio / Chem / Phys rotating', mins: 30 },
+    { subject: 'maths', focus: 'Parallel / DrFrost exam-level', mins: 30 }
+  ],
+  2: [ // Wed
+    { subject: 'cs', focus: 'Binary / hex practice', mins: 30 },
+    { subject: 'geography', focus: 'Hazards / plate tectonics', mins: 30 }
+  ],
+  3: [ // Thu
+    { subject: 'science', focus: 'Bio / Chem / Phys rotating', mins: 30 },
+    { subject: 'english', focus: 'Analysis practice', mins: 30 }
+  ],
+  4: [ // Fri
+    { subject: 'cs', focus: 'Cyber security', mins: 30 },
+    { subject: 'spanish', focus: 'Vocab Module 1', mins: 30 }
+  ],
+  5: [ // Sat (2hr)
+    { subject: 'science', focus: 'Deep dive', mins: 60 },
+    { subject: 'geography', focus: 'Glaciation', mins: 45 },
+    { subject: 'music', focus: 'Focus on Sound', mins: 15 }
+  ],
+  6: [ // Sun (2hr)
+    { subject: 'cs', focus: 'Deep dive', mins: 60 },
+    { subject: 'maths', focus: 'Review week + 1 harder topic', mins: 30 },
+    { subject: 'history', focus: 'Cold War topic', mins: 20 },
+    { subject: 'rs', focus: 'Knowledge organiser', mins: 20 }
+  ]
+};
+
+const SCHEDULE_P2 = {
+  0: [ // Mon
+    { subject: 'cs', focus: 'Python / code tracing', mins: 30 },
+    { subject: 'geography', focus: 'Case studies', mins: 30 },
+    { subject: 'english', focus: 'Past questions', mins: 30 }
+  ],
+  1: [ // Tue
+    { subject: 'science', focus: 'Topic deep dive', mins: 30 },
+    { subject: 'maths', focus: 'Parallel / DrFrost', mins: 30 },
+    { subject: 'english', focus: 'Writing practice', mins: 30 }
+  ],
+  2: [ // Wed
+    { subject: 'cs', focus: 'Binary / hex / data rep', mins: 30 },
+    { subject: 'geography', focus: 'Case studies', mins: 30 },
+    { subject: 'rs', focus: 'Past Qs', mins: 30 }
+  ],
+  3: [ // Thu
+    { subject: 'science', focus: 'Topic deep dive', mins: 30 },
+    { subject: 'maths', focus: 'Stretch problems', mins: 30 },
+    { subject: 'spanish', focus: 'Vocab + grammar', mins: 30 }
+  ],
+  4: [ // Fri
+    { subject: 'cs', focus: 'Cyber security + laws', mins: 30 },
+    { subject: 'spanish', focus: 'Writing in 3 tenses', mins: 30 },
+    { subject: 'rs', focus: 'Christianity (alt with History)', mins: 30 }
+  ],
+  5: [ // Sat (2.5hr)
+    { subject: 'science', focus: 'Deep dive', mins: 60 },
+    { subject: 'geography', focus: 'Case studies', mins: 45 },
+    { subject: 'music', focus: 'Focus on Sound', mins: 15 },
+    { subject: 'english', focus: 'Past paper section', mins: 30 }
+  ],
+  6: [ // Sun (2.5hr)
+    { subject: 'cs', focus: 'Deep dive + past Qs', mins: 60 },
+    { subject: 'maths', focus: 'Review + stretch', mins: 30 },
+    { subject: 'history', focus: 'Cold War', mins: 20 },
+    { subject: 'rs', focus: 'Knowledge organiser', mins: 20 },
+    { subject: 'english', focus: 'Weak topic', mins: 30 }
+  ]
+};
+
+// Day capacity in mins
+const DAY_CAPACITY_P1 = { weekday: 60, weekend: 120 };
+const DAY_CAPACITY_P2 = { weekday: 90, weekend: 150 };
+const OVERFLOW_ALLOWANCE = 30;
+
+function getCapacity(dayIndex, phase) {
+  const cap = phase === 2 ? DAY_CAPACITY_P2 : DAY_CAPACITY_P1;
+  return (dayIndex >= 5) ? cap.weekend : cap.weekday;
+}
+
+function getBaseSchedule(dayIndex, phase) {
+  const schedule = phase === 2 ? SCHEDULE_P2 : SCHEDULE_P1;
+  return JSON.parse(JSON.stringify(schedule[dayIndex] || []));
+}
+
+// ============ STORAGE ============
+
+const STORAGE_KEY = 'harry_revision_v2';
+
+function loadData() {
+  try {
+    const d = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    if (!d.topics) d.topics = {};
+    if (!d.daily) d.daily = {};  // dateKey -> { slots: [...], done: {0:bool,1:bool,...}, generated: bool }
+    if (!d.streak) d.streak = 0;
+    if (!d.carriedOverNotice) d.carriedOverNotice = null;
+    return d;
+  } catch { return { topics: {}, daily: {}, streak: 0, carriedOverNotice: null }; }
+}
+
+function saveData(d) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+}
+
+// ============ SCHEDULER ============
+//
+// Core principle: each day has a "schedule" — a list of blocks.
+// On first access of a date, schedule is generated from base template + any carried-over.
+// Once generated and saved, the schedule is fixed for that date (won't regenerate).
+//
+// Rescheduler runs at start of new day:
+// 1. Look at all previous days (where the date < today)
+// 2. For each, find slots that weren't marked done
+// 3. Collect them as "carry-over candidates"
+// 4. Try to place them in upcoming days using smart fitting:
+//    - Same week first (current week boundary = Mon-Sun containing today)
+//    - Weekday with capacity > weekend if weekday has room
+//    - Else weekend
+//    - Allow overflow up to OVERFLOW_ALLOWANCE per day
+//    - Match by rescheduleWeight (lower weight = priority subjects placed first)
+// 5. Mark carried-over slots with {rescheduled: true}
+// 6. If a slot can't be placed (no capacity anywhere in week), drop it but log
+
+function getOrGenerateSchedule(d) {
+  const key = dateKey(d);
+  const data = loadData();
+  if (data.daily[key] && data.daily[key].generated) {
+    return data.daily[key];
+  }
+  // Generate fresh
+  const phase = getPhaseForDate(d);
+  const dayIdx = getDayIndex(d);
+  const base = getBaseSchedule(dayIdx, phase);
+  const slots = base.map(b => ({ ...b, rescheduled: false, overflow: false }));
+  const dayRecord = { slots, done: {}, generated: true, date: key };
+  data.daily[key] = dayRecord;
+  saveData(data);
+  return dayRecord;
+}
+
+function runRescheduler() {
+  const data = loadData();
+  const today = todayDate();
+  const todayKey = dateKey(today);
+
+  // Find missed slots from past days that weren't already carried over
+  const missed = [];
+  for (const [key, day] of Object.entries(data.daily)) {
+    const d = new Date(key);
+    d.setHours(0,0,0,0);
+    if (d >= today) continue;
+    if (!day.slots) continue;
+    day.slots.forEach((slot, idx) => {
+      if (!day.done[idx] && !slot.carriedAway) {
+        missed.push({
+          fromDate: key,
+          fromIndex: idx,
+          slot: slot
+        });
+      }
+    });
+  }
+
+  if (missed.length === 0) return { rescheduled: 0, dropped: 0 };
+
+  // Sort missed by rescheduleWeight ASC (highest priority first)
+  missed.sort((a, b) => {
+    const wa = SUBJECTS[a.slot.subject]?.rescheduleWeight ?? 99;
+    const wb = SUBJECTS[b.slot.subject]?.rescheduleWeight ?? 99;
+    return wa - wb;
+  });
+
+  // Determine target days: today through end of current week (Mon-Sun containing today)
+  // Then if still missed, weekend of next week
+  const todayIdx = getDayIndex(today);
+  const targetDays = [];
+  // Add today + rest of week
+  for (let i = 0; i <= (6 - todayIdx); i++) {
+    targetDays.push(addDays(today, i));
+  }
+  // Add weekend of next week as overflow
+  const nextSat = addDays(today, (6 - todayIdx) + 6);
+  const nextSun = addDays(today, (6 - todayIdx) + 7);
+  if (!targetDays.find(d => dateKey(d) === dateKey(nextSat))) targetDays.push(nextSat);
+  if (!targetDays.find(d => dateKey(d) === dateKey(nextSun))) targetDays.push(nextSun);
+
+  // Ensure target days have schedules generated
+  targetDays.forEach(d => getOrGenerateSchedule(d));
+
+  let rescheduledCount = 0;
+  let droppedCount = 0;
+  const detail = [];
+
+  for (const item of missed) {
+    const slot = { ...item.slot, rescheduled: true };
+    let placed = false;
+
+    // Strategy: try to place in priority order:
+    // 1. Today (if has capacity)
+    // 2. Upcoming weekdays in current week (capacity check)
+    // 3. Weekend of current week
+    // 4. Next week weekend (overflow zone)
+
+    // For each target day, check current load + this slot vs capacity + overflow
+    for (const d of targetDays) {
+      const dKey = dateKey(d);
+      const dPhase = getPhaseForDate(d);
+      const dIdx = getDayIndex(d);
+      const capacity = getCapacity(dIdx, dPhase);
+
+      const dayData = loadData().daily[dKey];
+      if (!dayData) continue;
+
+      const currentLoad = dayData.slots.reduce((s, x) => s + (x.mins || 30), 0);
+      const overflow = currentLoad + slot.mins - capacity;
+
+      // Don't double-place same subject in same day (avoid back-to-back same subject)
+      const alreadyHasSubject = dayData.slots.some(x => x.subject === slot.subject);
+
+      // Place if:
+      // - Within capacity, OR
+      // - Within overflow allowance (+30 min)
+      // - AND not duplicating same-subject (preference, can override if no other option)
+      const fitsClean = (currentLoad + slot.mins <= capacity);
+      const fitsOverflow = (currentLoad + slot.mins <= capacity + OVERFLOW_ALLOWANCE);
+
+      if (fitsClean && !alreadyHasSubject) {
+        // Best case: clean fit, no duplicate
+        slot.rescheduled = true;
+        slot.overflow = false;
+        slot.carriedFrom = item.fromDate;
+        dayData.slots.push(slot);
+        const data2 = loadData();
+        data2.daily[dKey] = dayData;
+        // Mark original as carried away
+        if (data2.daily[item.fromDate]) {
+          data2.daily[item.fromDate].slots[item.fromIndex].carriedAway = true;
+        }
+        saveData(data2);
+        placed = true;
+        rescheduledCount++;
+        detail.push(`${SUBJECTS[slot.subject].name} (from ${formatShortDate(item.fromDate)}) → ${formatShortDate(dKey)}`);
+        break;
+      }
+    }
+
+    if (!placed) {
+      // Try again allowing overflow + same-subject
+      for (const d of targetDays) {
+        const dKey = dateKey(d);
+        const dPhase = getPhaseForDate(d);
+        const dIdx = getDayIndex(d);
+        const capacity = getCapacity(dIdx, dPhase);
+        const dayData = loadData().daily[dKey];
+        if (!dayData) continue;
+
+        const currentLoad = dayData.slots.reduce((s, x) => s + (x.mins || 30), 0);
+        const fitsOverflow = (currentLoad + slot.mins <= capacity + OVERFLOW_ALLOWANCE);
+
+        if (fitsOverflow) {
+          slot.rescheduled = true;
+          slot.overflow = true;
+          slot.carriedFrom = item.fromDate;
+          dayData.slots.push(slot);
+          const data2 = loadData();
+          data2.daily[dKey] = dayData;
+          if (data2.daily[item.fromDate]) {
+            data2.daily[item.fromDate].slots[item.fromIndex].carriedAway = true;
+          }
+          saveData(data2);
+          placed = true;
+          rescheduledCount++;
+          detail.push(`${SUBJECTS[slot.subject].name} (from ${formatShortDate(item.fromDate)}) → ${formatShortDate(dKey)} (overflow)`);
+          break;
+        }
+      }
+    }
+
+    if (!placed) {
+      // Couldn't place — mark as dropped
+      const data2 = loadData();
+      if (data2.daily[item.fromDate]) {
+        data2.daily[item.fromDate].slots[item.fromIndex].carriedAway = true;
+        data2.daily[item.fromDate].slots[item.fromIndex].dropped = true;
+      }
+      saveData(data2);
+      droppedCount++;
+    }
+  }
+
+  // Record notice for UI
+  if (rescheduledCount > 0 || droppedCount > 0) {
+    const data2 = loadData();
+    data2.carriedOverNotice = {
+      lastRun: dateKey(today),
+      rescheduled: rescheduledCount,
+      dropped: droppedCount,
+      detail: detail,
+      acknowledged: false
+    };
+    saveData(data2);
+  }
+
+  return { rescheduled: rescheduledCount, dropped: droppedCount };
+}
+
+function formatShortDate(key) {
+  const d = new Date(key);
+  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+}
+
+// Determine if rescheduler should run
+function maybeRunRescheduler() {
+  const data = loadData();
+  const todayKey = dateKey(todayDate());
+  // Run if not run today OR if user hits "force"
+  if (data.lastRescheduleRun !== todayKey) {
+    runRescheduler();
+    const data2 = loadData();
+    data2.lastRescheduleRun = todayKey;
+    saveData(data2);
+  }
+}
+
+function forceReschedule() {
+  if (!confirm('Force the rescheduler to run? This will pull any missed slots from past days into the current week.')) return;
+  const data = loadData();
+  delete data.lastRescheduleRun;
+  saveData(data);
+  runRescheduler();
+  location.reload();
+}
+
+// ============ INTERACTION ============
+
+function toggleSlot(slotIdx) {
+  const data = loadData();
+  const key = dateKey(todayDate());
+  if (!data.daily[key]) return;
+  data.daily[key].done[slotIdx] = !data.daily[key].done[slotIdx];
+  saveData(data);
+  renderToday();
+  updateStreak();
+}
+
+function toggleTopic(subjectKey, topicIndex) {
+  const data = loadData();
+  if (!data.topics[subjectKey]) data.topics[subjectKey] = {};
+  data.topics[subjectKey][topicIndex] = !data.topics[subjectKey][topicIndex];
+  saveData(data);
+  renderSubjects();
+  renderStats();
+  if (currentModalSubject) openSubject(currentModalSubject, true);
+}
+
+function getTopicProgress(key) {
+  const data = loadData();
+  if (!data.topics[key]) return { done: 0, total: SUBJECTS[key].topics.length };
+  const done = Object.values(data.topics[key]).filter(v => v).length;
+  return { done, total: SUBJECTS[key].topics.length };
+}
+
+function updateStreak() {
+  const data = loadData();
+  const todayKey = dateKey(todayDate());
+  const todayData = data.daily[todayKey];
+  if (todayData && Object.values(todayData.done || {}).filter(v => v).length > 0) {
+    if (data.lastActiveDate !== todayKey) {
+      const yesterdayKey = dateKey(addDays(todayDate(), -1));
+      if (data.lastActiveDate === yesterdayKey) {
+        data.streak = (data.streak || 0) + 1;
+      } else {
+        data.streak = 1;
+      }
+      data.lastActiveDate = todayKey;
+      saveData(data);
+    }
+  }
+  document.getElementById('streak-count').textContent = data.streak || 0;
+}
+
+function dismissRescheduleNotice() {
+  const data = loadData();
+  if (data.carriedOverNotice) {
+    data.carriedOverNotice.acknowledged = true;
+    saveData(data);
+  }
+  document.getElementById('reschedule-notice').style.display = 'none';
+}
+
+function resetProgress() {
+  if (confirm('Reset ALL progress? This cannot be undone.')) {
+    localStorage.removeItem(STORAGE_KEY);
+    location.reload();
+  }
+}
+
+// ============ RENDER ============
+
+function renderHero() {
+  const days = getDaysUntilExams();
+  document.getElementById('days-left').textContent = days;
+  const c = document.getElementById('countdown');
+  c.classList.remove('warning', 'urgent');
+  if (days <= 14) c.classList.add('urgent');
+  else if (days <= 28) c.classList.add('warning');
+
+  const hour = new Date().getHours();
+  let greeting = 'Hey Harry — let\'s go.';
+  if (hour < 12) greeting = 'Morning Harry — let\'s crack on.';
+  else if (hour < 17) greeting = 'Afternoon Harry — time to revise.';
+  else if (hour < 21) greeting = 'Evening Harry — let\'s get a slot done.';
+  else greeting = 'Late one Harry — keep it light.';
+  document.getElementById('hero-greeting').textContent = greeting;
+
+  const sub = days <= 7 ? 'Final stretch. Sleep matters more than cramming now.' :
+              days <= 21 ? 'Past papers and weak topics. Show what you know.' :
+              days <= 35 ? 'Build phase. Layer the knowledge.' :
+              'Stay sharp. Stay consistent. Smash it.';
+  document.getElementById('hero-sub').textContent = sub;
+}
+
+function renderPhase() {
+  const phase = getPhaseForDate(todayDate());
+  const week = getWeekNumber();
+  const badge = document.getElementById('phase-badge');
+  const desc = document.getElementById('phase-desc');
+  const progress = document.getElementById('phase-progress');
+  const pn = document.getElementById('phase-name');
+  const pd = document.getElementById('phase-dates');
+  const pNum = document.getElementById('phase-num');
+  const wh = document.getElementById('week-hours');
+
+  badge.classList.remove('phase-2', 'phase-3');
+
+  if (phase === 1) {
+    badge.textContent = 'Phase 1: Ramp-in';
+    desc.innerHTML = '<strong>1 hour weekdays</strong>, 2 hours weekend days';
+    pn.textContent = 'RAMP';
+    pd.textContent = '18-31 May';
+    wh.textContent = '9h';
+  } else if (phase === 2) {
+    badge.classList.add('phase-2');
+    badge.textContent = 'Phase 2: Build';
+    desc.innerHTML = '<strong>1.5h weekdays</strong>, 2.5h weekend days';
+    pn.textContent = 'BUILD';
+    pd.textContent = '1-28 Jun';
+    wh.textContent = '12.5h';
+  } else {
+    badge.classList.add('phase-3');
+    badge.textContent = 'Exam Phase';
+    desc.innerHTML = '<strong>Light review only.</strong> Sleep, water, exercise.';
+    pn.textContent = 'EXAMS';
+    pd.textContent = '29 Jun+';
+    wh.textContent = '—';
+  }
+  pNum.textContent = phase;
+  progress.textContent = `Week ${week} of 6`;
+}
+
+function renderRescheduleNotice() {
+  const data = loadData();
+  const notice = data.carriedOverNotice;
+  const el = document.getElementById('reschedule-notice');
+  if (!notice || notice.acknowledged || notice.rescheduled === 0) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'flex';
+  const txt = document.getElementById('reschedule-detail');
+  let msg = `${notice.rescheduled} slot${notice.rescheduled > 1 ? 's' : ''} carried over.`;
+  if (notice.dropped > 0) msg += ` ${notice.dropped} dropped (no capacity).`;
+  if (notice.detail && notice.detail.length) {
+    msg += ' ' + notice.detail.slice(0, 3).join('; ');
+    if (notice.detail.length > 3) msg += '...';
+  }
+  txt.textContent = msg;
+}
+
+function renderToday() {
+  const today = todayDate();
+  const day = getOrGenerateSchedule(today);
+  const data = loadData();
+  const grid = document.getElementById('today-grid');
+  grid.innerHTML = '';
+
+  day.slots.forEach((slot, i) => {
+    const subj = SUBJECTS[slot.subject];
+    if (!subj) return;
+    const isDone = data.daily[dateKey(today)].done[i];
+    const card = document.createElement('div');
+    card.className = 'slot-card';
+    if (slot.rescheduled) card.classList.add('rescheduled');
+    if (slot.overflow) card.classList.add('overflow');
+    card.style.setProperty('--subject-color', subj.color);
+    card.innerHTML = `
+      <div class="slot-time">${slot.mins} min</div>
+      <div class="slot-subject">${subj.name}</div>
+      <div class="slot-focus">${slot.focus || ''}</div>
+      <button class="slot-done-btn ${isDone ? 'done' : ''}" onclick="toggleSlot(${i})">${isDone ? '✓ Done' : 'Mark done'}</button>
+    `;
+    grid.appendChild(card);
+  });
+
+  document.getElementById('today-slots').textContent = day.slots.length;
+  const totalMins = day.slots.reduce((s, x) => s + (x.mins || 30), 0);
+  document.getElementById('today-slots-sub').textContent = `${totalMins} min total`;
+}
+
+function renderSubjects() {
+  const grid = document.getElementById('subjects-grid');
+  grid.innerHTML = '';
+  const phase = getPhaseForDate(todayDate());
+  Object.entries(SUBJECTS).forEach(([key, subj]) => {
+    const { done, total } = getTopicProgress(key);
+    const pct = total > 0 ? (done / total) * 100 : 0;
+    const time = phase === 2 ? subj.weeklyTimeP2 : subj.weeklyTime;
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.style.setProperty('--subject-color', subj.color);
+    card.onclick = () => openSubject(key);
+    card.innerHTML = `
+      <div class="subject-header">
+        <div class="subject-name">${subj.name}</div>
+        <div class="subject-priority priority-${subj.priority}">${subj.priorityLabel}</div>
+      </div>
+      <div class="subject-time">⌚ ${time} / week</div>
+      <div class="subject-meta">${subj.summary}</div>
+      <div class="subject-progress">
+        <div class="progress-label">
+          <span>Topics</span>
+          <span>${done}/${total}</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width:${pct}%; background:${subj.color};"></div>
+        </div>
+      </div>
+      <button class="btn-open">Open →</button>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+function renderStats() {
+  let totalDone = 0, totalAll = 0;
+  Object.keys(SUBJECTS).forEach(key => {
+    const { done, total } = getTopicProgress(key);
+    totalDone += done;
+    totalAll += total;
+  });
+  document.getElementById('topics-done').textContent = totalDone;
+  document.getElementById('topics-total').textContent = `of ${totalAll}`;
+}
+
+function renderSchedule() {
+  const table = document.getElementById('schedule-table');
+  const today = todayDate();
+  const todayIdx = getDayIndex(today);
+  const dayLabels = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+  // Build week schedule by looking at each day's actual stored schedule (or generating)
+  // Find Monday of current week
+  const monday = addDays(today, -todayIdx);
+
+  const weekDays = [];
+  for (let i = 0; i < 7; i++) {
+    const d = addDays(monday, i);
+    weekDays.push({
+      date: d,
+      day: dayLabels[i],
+      schedule: getOrGenerateSchedule(d),
+      isToday: i === todayIdx
+    });
+  }
+
+  const maxBlocks = Math.max(...weekDays.map(d => d.schedule.slots.length));
+
+  let html = '<thead><tr><th>Day</th>';
+  for (let i = 0; i < maxBlocks; i++) html += `<th>${i+1}</th>`;
+  html += '</tr></thead><tbody>';
+
+  weekDays.forEach((dayInfo, idx) => {
+    html += `<tr class="${dayInfo.isToday ? 'today-row' : ''}"><td class="day-cell">${dayInfo.day}${dayInfo.isToday ? ' ←' : ''}</td>`;
+    for (let i = 0; i < maxBlocks; i++) {
+      const slot = dayInfo.schedule.slots[i];
+      if (slot && SUBJECTS[slot.subject]) {
+        const subj = SUBJECTS[slot.subject];
+        const tag = slot.rescheduled ? ' ⤴' : '';
+        html += `<td><span style="color:${subj.color}; font-weight:600;">${subj.name.split(' ')[0]}${tag}</span><br><span style="color:var(--text-muted); font-size:0.75rem;">${slot.mins}m</span></td>`;
+      } else {
+        html += '<td style="color:var(--text-muted);">—</td>';
+      }
+    }
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+// ============ MODAL ============
+
+let currentModalSubject = null;
+
+function openSubject(key, keepScroll = false) {
+  const subj = SUBJECTS[key];
+  currentModalSubject = key;
+  const modal = document.getElementById('modal');
+  const overlay = document.getElementById('modal-overlay');
+  modal.style.setProperty('--subject-color', subj.color);
+  document.getElementById('modal-title').textContent = subj.name;
+  document.getElementById('modal-title').style.color = subj.color;
+  document.getElementById('modal-subtitle').textContent = `${subj.weeklyTime} / week · ${subj.priorityLabel.toLowerCase()} priority`;
+
+  const data = loadData();
+  const topicProgress = data.topics[key] || {};
+
+  const examInfoHtml = Object.entries(subj.examInfo).map(([k,v]) =>
+    `<div class="exam-stat"><div class="exam-stat-label">${k}</div><div class="exam-stat-value">${v}</div></div>`
+  ).join('');
+
+  const topicsHtml = subj.topics.map((topic, i) => {
+    const checked = topicProgress[i];
+    return `<li class="topic-item">
+      <div class="topic-checkbox ${checked ? 'checked' : ''}" onclick="toggleTopic('${key}', ${i})"></div>
+      <span class="topic-label">${topic}</span>
+    </li>`;
+  }).join('');
+
+  const resourcesHtml = subj.resources.map(r => `
+    <a href="${r.url}" target="_blank" rel="noopener" class="resource-link">
+      <div class="resource-info">
+        <div class="resource-name">${r.name}</div>
+        <div class="resource-desc">${r.desc}</div>
+      </div>
+      <span class="resource-arrow">→</span>
+    </a>
+  `).join('');
+
+  document.getElementById('modal-body').innerHTML = `
+    <div class="section-h">Why it matters</div>
+    <p style="color: var(--text-secondary); margin-bottom: 1rem;">${subj.summary}</p>
+    <div class="section-h">Exam info</div>
+    <div class="exam-info">${examInfoHtml}</div>
+    <div class="section-h">Teacher feedback</div>
+    <div class="teacher-note">${subj.teacherNote}</div>
+    <div class="section-h">Topics to cover</div>
+    <ul class="topics-list">${topicsHtml}</ul>
+    <div class="section-h">Resources</div>
+    <div class="resources-list">${resourcesHtml}</div>
+  `;
+
+  overlay.classList.add('active');
+  if (!keepScroll) {
+    document.body.style.overflow = 'hidden';
+    document.querySelector('.modal').scrollTop = 0;
+  }
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+  currentModalSubject = null;
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ============ PWA INSTALL ============
+
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  const banner = document.getElementById('install-banner');
+  const data = loadData();
+  if (!data.installDismissed) banner.classList.add('show');
+});
+
+function triggerInstall() {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => {
+      deferredPrompt = null;
+      document.getElementById('install-banner').classList.remove('show');
+    });
+  }
+}
+
+function dismissInstall() {
+  const data = loadData();
+  data.installDismissed = true;
+  saveData(data);
+  document.getElementById('install-banner').classList.remove('show');
+}
+
+// ============ SERVICE WORKER ============
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
+// ============ INIT ============
+
+maybeRunRescheduler();
+renderHero();
+renderPhase();
+renderRescheduleNotice();
+renderToday();
+renderSubjects();
+renderStats();
+renderSchedule();
+updateStreak();
+
+setInterval(renderHero, 60000);
+
+// Check for new day every 30 minutes (handles overnight reopens)
+setInterval(() => {
+  maybeRunRescheduler();
+  renderHero();
+  renderToday();
+  renderSchedule();
+}, 30 * 60 * 1000);
+</script>
+</body>
+</html>
