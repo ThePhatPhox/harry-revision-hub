@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Revise">
-<title>Harry's Revision Hub v2.2</title>
+<title>Harry's Revision Hub v2.3</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" href="icon-192.svg">
@@ -701,7 +701,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-title">harry.revision</div>
-      <span class="version">v2.2</span>
+      <span class="version">v2.3</span>
     </div>
     <div class="header-stats">
       <span class="header-stat">EOY · <strong>29 Jun</strong></span>
@@ -750,7 +750,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="phase-bar">
     <div class="phase-info">
       <span class="phase-badge" id="phase-badge">Phase 1: Ramp-in</span>
-      <span class="phase-text" id="phase-desc"><strong>1 hour weekdays</strong>, 2 hours weekend days</span>
+      <span class="phase-text" id="phase-desc"><strong>1h 15m weekdays</strong>, 2h weekend days</span>
     </div>
     <div class="phase-progress" id="phase-progress">Week 1 of 6</div>
   </div>
@@ -825,7 +825,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 </main>
 
 <footer>
-  Built for Harry · v2.2 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
+  Built for Harry · v2.3 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
 </footer>
 
 <!-- Timer Completion Modal -->
@@ -906,7 +906,7 @@ const SUBJECTS = {
   cs: {
     name: 'Computer Science', color: 'var(--cs)', priority: 'critical', priorityLabel: 'Critical',
     rescheduleWeight: 1,
-    weeklyTime: '3 hrs', weeklyTimeP2: '~3.5 hrs',
+    weeklyTime: '2 hrs', weeklyTimeP2: '~2h 45m',
     summary: 'Chosen GCSE (OCR J277). Currently target S4 — needs to dramatically exceed this. Building strong foundation for Y10.',
     teacherNote: 'Steady progress. Basic Python (T2) and binary number system (T3) developed soundly. Currently working on cyber security. Benefits from step-by-step guidance but beginning to show more independence.',
     examInfo: { 'GCSE Board': 'OCR J277', 'Likely Y9 topics': 'Python, Binary, Cyber Security', 'Format': 'Awaiting school', 'Y10 onwards': '2 papers, 1h30 each' },
@@ -941,7 +941,7 @@ const SUBJECTS = {
   science: {
     name: 'Triple Science', color: 'var(--science)', priority: 'critical', priorityLabel: 'Critical',
     rescheduleWeight: 1,
-    weeklyTime: '2 hrs', weeklyTimeP2: '~2 hrs',
+    weeklyTime: '2 hrs', weeklyTimeP2: '~2h 30m',
     summary: 'Above target. Results determine triple vs combined pathway. 3 papers: Biology, Chemistry, Physics (40 marks / 40 min each).',
     teacherNote: 'A lively and motivated student who handles Higher-tier assessments well, though confidence sometimes wanes. Focus on refining exam technique, particularly conciseness of responses. Complete extra Educake questions to strengthen long-term memory.',
     examInfo: { 'Format': '3 papers (Bio, Chem, Phys)', 'Each': '40 marks · 40 mins', 'Topics': '9 total', 'Pathway': 'Triple/combined' },
@@ -972,7 +972,7 @@ const SUBJECTS = {
   geography: {
     name: 'Geography', color: 'var(--geography)', priority: 'critical', priorityLabel: 'Critical',
     rescheduleWeight: 2,
-    weeklyTime: '1h 45m', weeklyTimeP2: '~2 hrs',
+    weeklyTime: '1h 45m', weeklyTimeP2: '~2h 30m',
     summary: 'Chosen GCSE but BELOW target. Wide content (7+ topics). Needs disciplined coverage and case study mastery.',
     teacherNote: 'Currently working below the expected level. Works well but can become distracted. Practise geographical skills on the Turing House School website, especially data interpretation and structured written responses.',
     examInfo: { 'Format': '1 paper', 'Marks': '45', 'Topics': '7+ areas', 'Status': 'Below target' },
@@ -1000,7 +1000,7 @@ const SUBJECTS = {
   maths: {
     name: 'Mathematics', color: 'var(--maths)', priority: 'high', priorityLabel: 'Stretch',
     rescheduleWeight: 3,
-    weeklyTime: '1 hr', weeklyTimeP2: '1.5 hrs',
+    weeklyTime: '1h 15m', weeklyTimeP2: '1h 45m',
     summary: 'Above target. Higher tier confirmed. Goal: AQA Level 2 Further Maths positioning. Focus on algebraic reasoning.',
     teacherNote: 'Excellent attitude, working above target. Attempt Parallel online tasks released weekly. Revisit DrFrostMaths course page. Attempt exam-level questions for GCSE preparation.',
     examInfo: { 'Format': '2 papers', 'Non-calc': '50 mins', 'Calc': '50 mins', 'Tier': 'Higher', 'Target qual': 'AQA L2 Further Maths' },
@@ -1026,7 +1026,7 @@ const SUBJECTS = {
   english: {
     name: 'English', color: 'var(--english)', priority: 'medium', priorityLabel: 'Core',
     rescheduleWeight: 4,
-    weeklyTime: '30 min', weeklyTimeP2: '1 hr',
+    weeklyTime: '1 hr', weeklyTimeP2: '1h 30m',
     summary: 'On track at A grade. Reading + creative writing paper across a full double lesson.',
     teacherNote: 'Good term, positive attitude. Works hard on written tasks. To improve: develop single-word analysis and explore writers\' intentions in more depth.',
     examInfo: { 'Format': '1 paper, 2 sections', 'Section 1': 'Reading', 'Section 2': 'Creative writing', 'Length': 'Double lesson' },
@@ -1047,7 +1047,7 @@ const SUBJECTS = {
   spanish: {
     name: 'Spanish', color: 'var(--spanish)', priority: 'medium', priorityLabel: 'Maintain',
     rescheduleWeight: 4,
-    weeklyTime: '30 min', weeklyTimeP2: '1 hr',
+    weeklyTime: '30 min', weeklyTimeP2: '45 min',
     summary: 'Above+ target. Strong A grade. Viva Edexcel GCSE Modules 1-3. Reading, listening and writing.',
     teacherNote: 'Excellent student, high engagement and enthusiasm. Very strong grasp of vocabulary and grammar. Revise all vocabulary from GCSE modules 1-3.',
     examInfo: { 'Format': 'Reading, listening, writing', 'M1': 'Holidays', 'M2': 'School', 'M3': 'Family/tech', 'Writing': '3 tenses + opinions' },
@@ -1072,7 +1072,7 @@ const SUBJECTS = {
   rs: {
     name: 'Religious Studies', color: 'var(--rs)', priority: 'medium', priorityLabel: 'Y10 Exam',
     rescheduleWeight: 5,
-    weeklyTime: '20 min', weeklyTimeP2: '30 min',
+    weeklyTime: '15 min', weeklyTimeP2: '1 hr',
     summary: 'Real GCSE — sat in Year 10. AQA 8062 spec. Christianity unit assessed in EOY.',
     teacherNote: 'Good commitment. Positive class participation, written work generally well organised. To develop: include more detailed examples and evidence to strengthen explanations.',
     examInfo: { 'Topic': 'Christianity', 'Format': '5 questions', 'Marks': '1+2+4+5+12', 'Total': '24' },
@@ -1093,7 +1093,7 @@ const SUBJECTS = {
   history: {
     name: 'History', color: 'var(--history)', priority: 'medium', priorityLabel: 'Light',
     rescheduleWeight: 6,
-    weeklyTime: '20 min', weeklyTimeP2: '30 min',
+    weeklyTime: '1h 15m', weeklyTimeP2: '1h 30m',
     summary: 'Solid B/A. Topic is the early Cold War. 40-min paper.',
     teacherNote: 'Good knowledge of twentieth-century history. To progress: take more active role, contribute more regularly, show greater independence.',
     examInfo: { 'Format': '40-min paper', 'Q1': 'Explain consequence ×2', 'Q2': 'Analytical narrative', 'Q3': 'Importance of event' },
@@ -1135,83 +1135,92 @@ const SUBJECTS = {
 // Each block: { subject, focus, mins }
 
 const SCHEDULE_P1 = {
-  0: [ // Mon
+  0: [ // Mon (75min)
     { subject: 'cs', focus: 'Diagnostic / weak topics', mins: 30 },
-    { subject: 'geography', focus: 'Population', mins: 30 }
+    { subject: 'english', focus: 'Analysis practice', mins: 30 },
+    { subject: 'history', focus: 'Cold War origins', mins: 15 }
   ],
-  1: [ // Tue
+  1: [ // Tue (75min)
     { subject: 'science', focus: 'Bio / Chem / Phys rotating', mins: 30 },
-    { subject: 'maths', focus: 'Parallel / DrFrost exam-level', mins: 30 }
+    { subject: 'maths', focus: 'Parallel / DrFrost exam-level', mins: 30 },
+    { subject: 'history', focus: 'Tehran / Yalta / Potsdam', mins: 15 }
   ],
-  2: [ // Wed
+  2: [ // Wed (75min)
     { subject: 'cs', focus: 'Binary / hex practice', mins: 30 },
-    { subject: 'geography', focus: 'Hazards / plate tectonics', mins: 30 }
+    { subject: 'geography', focus: 'Population & hazards', mins: 30 },
+    { subject: 'maths', focus: 'Mixed topics', mins: 15 }
   ],
-  3: [ // Thu
+  3: [ // Thu (75min)
     { subject: 'science', focus: 'Bio / Chem / Phys rotating', mins: 30 },
-    { subject: 'english', focus: 'Analysis practice', mins: 30 }
+    { subject: 'english', focus: 'Reading comprehension', mins: 30 },
+    { subject: 'history', focus: 'Long & Novikov telegrams', mins: 15 }
   ],
-  4: [ // Fri
+  4: [ // Fri (75min)
     { subject: 'cs', focus: 'Cyber security', mins: 30 },
-    { subject: 'spanish', focus: 'Vocab Module 1', mins: 30 }
+    { subject: 'spanish', focus: 'Vocab Module 1', mins: 30 },
+    { subject: 'history', focus: 'Truman / Marshall Plan', mins: 15 }
   ],
-  5: [ // Sat (2hr)
+  5: [ // Sat (120min)
     { subject: 'science', focus: 'Deep dive', mins: 60 },
-    { subject: 'geography', focus: 'Glaciation', mins: 45 },
+    { subject: 'geography', focus: 'Glaciation case study', mins: 45 },
     { subject: 'music', focus: 'Focus on Sound', mins: 15 }
   ],
-  6: [ // Sun (2hr)
-    { subject: 'cs', focus: 'Deep dive', mins: 60 },
-    { subject: 'maths', focus: 'Review week + 1 harder topic', mins: 30 },
-    { subject: 'history', focus: 'Cold War topic', mins: 20 },
-    { subject: 'rs', focus: 'Knowledge organiser', mins: 20 }
+  6: [ // Sun (120min)
+    { subject: 'cs', focus: 'Deep dive', mins: 30 },
+    { subject: 'maths', focus: 'Stretch', mins: 30 },
+    { subject: 'geography', focus: 'Case studies review', mins: 30 },
+    { subject: 'history', focus: 'Berlin Crisis', mins: 15 },
+    { subject: 'rs', focus: 'Knowledge organiser', mins: 15 }
   ]
 };
 
 const SCHEDULE_P2 = {
-  0: [ // Mon
+  0: [ // Mon (90min)
     { subject: 'cs', focus: 'Python / code tracing', mins: 30 },
     { subject: 'geography', focus: 'Case studies', mins: 30 },
     { subject: 'english', focus: 'Past questions', mins: 30 }
   ],
-  1: [ // Tue
+  1: [ // Tue (90min)
     { subject: 'science', focus: 'Topic deep dive', mins: 30 },
     { subject: 'maths', focus: 'Parallel / DrFrost', mins: 30 },
     { subject: 'english', focus: 'Writing practice', mins: 30 }
   ],
-  2: [ // Wed
+  2: [ // Wed (90min)
     { subject: 'cs', focus: 'Binary / hex / data rep', mins: 30 },
     { subject: 'geography', focus: 'Case studies', mins: 30 },
-    { subject: 'rs', focus: 'Past Qs', mins: 30 }
+    { subject: 'history', focus: 'Cold War events', mins: 30 }
   ],
-  3: [ // Thu
+  3: [ // Thu (105min)
     { subject: 'science', focus: 'Topic deep dive', mins: 30 },
     { subject: 'maths', focus: 'Stretch problems', mins: 30 },
-    { subject: 'spanish', focus: 'Vocab + grammar', mins: 30 }
+    { subject: 'geography', focus: 'Case studies', mins: 45 }
   ],
-  4: [ // Fri
+  4: [ // Fri (105min)
     { subject: 'cs', focus: 'Cyber security + laws', mins: 30 },
-    { subject: 'spanish', focus: 'Writing in 3 tenses', mins: 30 },
-    { subject: 'rs', focus: 'Christianity (alt with History)', mins: 30 }
+    { subject: 'history', focus: 'Cold War events', mins: 30 },
+    { subject: 'rs', focus: 'Christianity beliefs', mins: 30 },
+    { subject: 'spanish', focus: 'Writing 3 tenses', mins: 15 }
   ],
-  5: [ // Sat (2.5hr)
+  5: [ // Sat (195min)
     { subject: 'science', focus: 'Deep dive', mins: 60 },
     { subject: 'geography', focus: 'Case studies', mins: 45 },
-    { subject: 'music', focus: 'Focus on Sound', mins: 15 },
-    { subject: 'english', focus: 'Past paper section', mins: 30 }
+    { subject: 'cs', focus: 'Past Qs', mins: 30 },
+    { subject: 'science', focus: 'Past paper section', mins: 30 },
+    { subject: 'spanish', focus: 'Vocab', mins: 30 }
   ],
-  6: [ // Sun (2.5hr)
-    { subject: 'cs', focus: 'Deep dive + past Qs', mins: 60 },
-    { subject: 'maths', focus: 'Review + stretch', mins: 30 },
-    { subject: 'history', focus: 'Cold War', mins: 20 },
-    { subject: 'rs', focus: 'Knowledge organiser', mins: 20 },
-    { subject: 'english', focus: 'Weak topic', mins: 30 }
+  6: [ // Sun (195min)
+    { subject: 'cs', focus: 'Deep dive', mins: 45 },
+    { subject: 'maths', focus: 'Review + stretch', mins: 45 },
+    { subject: 'rs', focus: 'Knowledge organiser', mins: 30 },
+    { subject: 'history', focus: 'Cold War review', mins: 30 },
+    { subject: 'english', focus: 'Weak topic', mins: 30 },
+    { subject: 'music', focus: 'Focus on Sound', mins: 15 }
   ]
 };
 
 // Day capacity in mins
-const DAY_CAPACITY_P1 = { weekday: 60, weekend: 120 };
-const DAY_CAPACITY_P2 = { weekday: 90, weekend: 150 };
+const DAY_CAPACITY_P1 = { weekday: 75, weekend: 120 };
+const DAY_CAPACITY_P2 = { weekday: 105, weekend: 195 };
 const OVERFLOW_ALLOWANCE = 30;
 
 function getCapacity(dayIndex, phase) {
@@ -1777,17 +1786,17 @@ function renderPhase() {
 
   if (phase === 1) {
     badge.textContent = 'Phase 1: Ramp-in';
-    desc.innerHTML = '<strong>1 hour weekdays</strong>, 2 hours weekend days';
+    desc.innerHTML = '<strong>1h 15m weekdays</strong>, 2h weekend days';
     pn.textContent = 'RAMP';
     pd.textContent = '18-31 May';
-    wh.textContent = '9h';
+    wh.textContent = '10h';
   } else if (phase === 2) {
     badge.classList.add('phase-2');
     badge.textContent = 'Phase 2: Build';
-    desc.innerHTML = '<strong>1.5h weekdays</strong>, 2.5h weekend days';
+    desc.innerHTML = '<strong>1h 30m–1h 45m weekdays</strong>, 3h 15m weekend days';
     pn.textContent = 'BUILD';
     pd.textContent = '1-28 Jun';
-    wh.textContent = '12.5h';
+    wh.textContent = '14.5h';
   } else {
     badge.classList.add('phase-3');
     badge.textContent = 'Exam Phase';
