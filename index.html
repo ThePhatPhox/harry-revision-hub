@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Revise">
-<title>Harry's Revision Hub v2.0</title>
+<title>Harry's Revision Hub v2.1</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" href="icon-192.svg">
@@ -580,9 +580,119 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 .subject-card:nth-child(8) { animation-delay: 0.4s; }
 .subject-card:nth-child(9) { animation-delay: 0.45s; }
 
+/* Timer Panel */
+.timer-panel {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(8px);
+  background: rgba(26,32,51,0.95);
+}
+.timer-panel.running { border-color: var(--accent); box-shadow: 0 0 16px rgba(0,217,163,0.2); }
+.timer-panel.paused { border-color: var(--warning); }
+.timer-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.85rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.timer-panel.running .timer-display { color: var(--accent); }
+.timer-panel.paused .timer-display { color: var(--warning); }
+.timer-info {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 0.25rem;
+}
+.timer-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.timer-btn {
+  background: var(--bg-base);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  padding: 0.55rem 0.9rem;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.timer-btn:hover { border-color: var(--accent); }
+.timer-btn.primary { background: var(--accent); color: var(--bg-base); border-color: var(--accent); }
+.timer-btn.warning { background: var(--warning); color: var(--bg-base); border-color: var(--warning); }
+.timer-btn.danger { background: var(--urgent); color: white; border-color: var(--urgent); }
+.timer-btn.ghost { background: transparent; color: var(--text-muted); }
+
+/* Slot timer indicator */
+.slot-timer-active {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-left: 0.4rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* Timer completion modal */
+.complete-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+.complete-overlay.active { display: flex; }
+.complete-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--accent);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(0,217,163,0.3);
+}
+.complete-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+.complete-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--accent); }
+.complete-detail { color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem; }
+.complete-actions { display: flex; gap: 0.65rem; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .timer-panel { padding: 0.85rem 1rem; flex-wrap: wrap; }
+  .timer-display { font-size: 1.5rem; }
+  .timer-btn { font-size: 0.7rem; padding: 0.5rem 0.7rem; }
+}
+
 @media (display-mode: standalone) {
   header { padding-top: max(env(safe-area-inset-top), 0.5rem); }
 }
+
 </style>
 </head>
 <body>
@@ -591,7 +701,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-title">harry.revision</div>
-      <span class="version">v2.0</span>
+      <span class="version">v2.1</span>
     </div>
     <div class="header-stats">
       <span class="header-stat">EOY · <strong>29 Jun</strong></span>
@@ -717,6 +827,19 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 <footer>
   Built for Harry · v2.0 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
 </footer>
+
+<!-- Timer Completion Modal -->
+<div class="complete-overlay" id="complete-overlay">
+  <div class="complete-card">
+    <div class="complete-icon">🎯</div>
+    <div class="complete-title" id="complete-title">Slot complete!</div>
+    <div class="complete-detail" id="complete-detail">You spent 30 minutes on Computer Science.</div>
+    <div class="complete-actions">
+      <button class="timer-btn primary" onclick="confirmSlotDone()">Mark slot done</button>
+      <button class="timer-btn ghost" onclick="dismissComplete()">Not yet</button>
+    </div>
+  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this) closeModal()">
@@ -1120,6 +1243,205 @@ function saveData(d) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
 }
 
+// ============ TIMER ENGINE ============
+// One active timer at a time, stored in localStorage so it persists across reloads
+// State: { subject, startedAt (ms), pausedAt (ms|null), elapsedBeforePause (ms), targetMins }
+
+let timerInterval = null;
+
+function getTimer() {
+  const data = loadData();
+  return data.timer || null;
+}
+
+function setTimer(t) {
+  const data = loadData();
+  if (t === null) delete data.timer;
+  else data.timer = t;
+  saveData(data);
+}
+
+function getTimerElapsedMs() {
+  const t = getTimer();
+  if (!t) return 0;
+  if (t.pausedAt) return t.elapsedBeforePause;
+  return t.elapsedBeforePause + (Date.now() - t.startedAt);
+}
+
+function startTimer(subjectKey, targetMins) {
+  // Default target: lookup from today's first matching slot, else 30
+  if (!targetMins) {
+    const today = todayDate();
+    const day = getOrGenerateSchedule(today);
+    const matchingSlot = day.slots.find(s => s.subject === subjectKey);
+    targetMins = matchingSlot ? matchingSlot.mins : 30;
+  }
+  setTimer({
+    subject: subjectKey,
+    startedAt: Date.now(),
+    pausedAt: null,
+    elapsedBeforePause: 0,
+    targetMins: targetMins,
+    completionShown: false
+  });
+  startTimerInterval();
+  renderTimerPanel();
+  renderToday();
+}
+
+function pauseTimer() {
+  const t = getTimer();
+  if (!t || t.pausedAt) return;
+  const newElapsed = t.elapsedBeforePause + (Date.now() - t.startedAt);
+  setTimer({ ...t, pausedAt: Date.now(), elapsedBeforePause: newElapsed });
+  renderTimerPanel();
+}
+
+function resumeTimer() {
+  const t = getTimer();
+  if (!t || !t.pausedAt) return;
+  setTimer({ ...t, startedAt: Date.now(), pausedAt: null });
+  renderTimerPanel();
+}
+
+function stopTimer() {
+  if (!confirm('Stop the timer? Your time will be lost.')) return;
+  setTimer(null);
+  stopTimerInterval();
+  renderTimerPanel();
+  renderToday();
+}
+
+function startTimerInterval() {
+  stopTimerInterval();
+  timerInterval = setInterval(() => {
+    const t = getTimer();
+    if (!t) { stopTimerInterval(); return; }
+    renderTimerPanel(false); // re-render display without re-running other logic
+    // Check completion
+    if (!t.completionShown && !t.pausedAt) {
+      const elapsedMin = getTimerElapsedMs() / 60000;
+      if (elapsedMin >= t.targetMins) {
+        showCompletionModal();
+        setTimer({ ...t, completionShown: true });
+      }
+    }
+  }, 1000);
+}
+
+function stopTimerInterval() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+}
+
+function formatTime(ms) {
+  const totalSec = Math.floor(ms / 1000);
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function showCompletionModal() {
+  const t = getTimer();
+  if (!t) return;
+  const subj = SUBJECTS[t.subject];
+  document.getElementById('complete-title').textContent = 'Slot complete!';
+  document.getElementById('complete-detail').textContent =
+    `You spent ${t.targetMins} minutes on ${subj.name}. Nice work.`;
+  document.getElementById('complete-overlay').classList.add('active');
+  // Play a sound if possible
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.5);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+  } catch(e) { /* ignore */ }
+  // Vibrate if mobile
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+}
+
+function dismissComplete() {
+  document.getElementById('complete-overlay').classList.remove('active');
+}
+
+function confirmSlotDone() {
+  // Find the first un-done slot for this subject in today's schedule, mark it done, stop timer
+  const t = getTimer();
+  if (!t) { dismissComplete(); return; }
+  const data = loadData();
+  const todayKey = dateKey(todayDate());
+  const day = data.daily[todayKey];
+  if (day) {
+    const idx = day.slots.findIndex(s => s.subject === t.subject && !day.done[day.slots.indexOf(s)]);
+    // Above is buggy — just iterate properly
+    for (let i = 0; i < day.slots.length; i++) {
+      if (day.slots[i].subject === t.subject && !day.done[i]) {
+        day.done[i] = true;
+        break;
+      }
+    }
+    saveData(data);
+  }
+  setTimer(null);
+  stopTimerInterval();
+  dismissComplete();
+  renderToday();
+  renderTimerPanel();
+  updateStreak();
+}
+
+function renderTimerPanel(fullRefresh = true) {
+  const panel = document.getElementById('timer-panel');
+  if (!panel) return;
+  const t = getTimer();
+  if (!t || !currentModalSubject || t.subject !== currentModalSubject) {
+    // Show "no timer running" state if modal is open for this subject
+    if (currentModalSubject) {
+      panel.className = 'timer-panel';
+      panel.innerHTML = `
+        <div>
+          <div class="timer-display">00:00</div>
+          <div class="timer-info">No timer running</div>
+        </div>
+        <div class="timer-controls">
+          <button class="timer-btn primary" onclick="startTimer('${currentModalSubject}')">▶ Start</button>
+        </div>
+      `;
+    }
+    return;
+  }
+  // Timer running for this subject
+  const elapsedMs = getTimerElapsedMs();
+  const remainingMs = Math.max(0, t.targetMins * 60000 - elapsedMs);
+  const isPaused = !!t.pausedAt;
+  const isOvertime = elapsedMs >= t.targetMins * 60000;
+
+  panel.className = 'timer-panel ' + (isPaused ? 'paused' : 'running');
+  const display = isOvertime ? `+${formatTime(elapsedMs - t.targetMins * 60000)}` : formatTime(remainingMs);
+  const infoText = isPaused ? `Paused · target ${t.targetMins} min` :
+                    isOvertime ? `Over target by ${formatTime(elapsedMs - t.targetMins * 60000)}` :
+                    `${t.targetMins} min target · ${formatTime(elapsedMs)} elapsed`;
+
+  panel.innerHTML = `
+    <div>
+      <div class="timer-display">${display}</div>
+      <div class="timer-info">${infoText}</div>
+    </div>
+    <div class="timer-controls">
+      ${isPaused
+        ? `<button class="timer-btn primary" onclick="resumeTimer()">▶ Resume</button>`
+        : `<button class="timer-btn warning" onclick="pauseTimer()">⏸ Pause</button>`}
+      <button class="timer-btn primary" onclick="confirmSlotDone()">✓ Done</button>
+      <button class="timer-btn ghost" onclick="stopTimer()">✕</button>
+    </div>
+  `;
+}
+
 // ============ SCHEDULER ============
 //
 // Core principle: each day has a "schedule" — a list of blocks.
@@ -1506,6 +1828,8 @@ function renderToday() {
     const subj = SUBJECTS[slot.subject];
     if (!subj) return;
     const isDone = data.daily[dateKey(today)].done[i];
+    const activeTimer = getTimer();
+    const isTimerActive = activeTimer && activeTimer.subject === slot.subject && !activeTimer.pausedAt;
     const card = document.createElement('div');
     card.className = 'slot-card';
     if (slot.rescheduled) card.classList.add('rescheduled');
@@ -1513,7 +1837,7 @@ function renderToday() {
     card.style.setProperty('--subject-color', subj.color);
     card.innerHTML = `
       <div class="slot-time">${slot.mins} min</div>
-      <div class="slot-subject">${subj.name}</div>
+      <div class="slot-subject">${subj.name}${isTimerActive ? '<span class="slot-timer-active"></span>' : ''}</div>
       <div class="slot-focus">${slot.focus || ''}</div>
       <button class="slot-done-btn ${isDone ? 'done' : ''}" onclick="toggleSlot(${i})">${isDone ? '✓ Done' : 'Mark done'}</button>
     `;
@@ -1655,6 +1979,7 @@ function openSubject(key, keepScroll = false) {
   `).join('');
 
   document.getElementById('modal-body').innerHTML = `
+    <div class="timer-panel" id="timer-panel"></div>
     <div class="section-h">Why it matters</div>
     <p style="color: var(--text-secondary); margin-bottom: 1rem;">${subj.summary}</p>
     <div class="section-h">Exam info</div>
@@ -1672,6 +1997,7 @@ function openSubject(key, keepScroll = false) {
     document.body.style.overflow = 'hidden';
     document.querySelector('.modal').scrollTop = 0;
   }
+  renderTimerPanel();
 }
 
 function closeModal() {
@@ -1730,6 +2056,9 @@ renderSubjects();
 renderStats();
 renderSchedule();
 updateStreak();
+
+// Resume timer interval if one was active
+if (getTimer()) startTimerInterval();
 
 setInterval(renderHero, 60000);
 
