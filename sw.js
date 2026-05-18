@@ -1,5 +1,5 @@
-// Harry's Revision Hub Service Worker v2.1
-const CACHE_NAME = 'harry-revision-v2.1';
+// Harry's Revision Hub Service Worker v2.2
+const CACHE_NAME = 'harry-revision-v2.2';
 const ASSETS = [
   './',
   './index.html',

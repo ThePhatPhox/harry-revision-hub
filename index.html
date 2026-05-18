@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Revise">
-<title>Harry's Revision Hub v2.1</title>
+<title>Harry's Revision Hub v2.2</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" href="icon-192.svg">
@@ -701,7 +701,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-title">harry.revision</div>
-      <span class="version">v2.1</span>
+      <span class="version">v2.2</span>
     </div>
     <div class="header-stats">
       <span class="header-stat">EOY · <strong>29 Jun</strong></span>
@@ -825,7 +825,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 </main>
 
 <footer>
-  Built for Harry · v2.0 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
+  Built for Harry · v2.2 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
 </footer>
 
 <!-- Timer Completion Modal -->
@@ -1488,6 +1488,8 @@ function runRescheduler() {
   for (const [key, day] of Object.entries(data.daily)) {
     const d = new Date(key);
     d.setHours(0,0,0,0);
+    // v2.2: ignore anything before the plan even started (purges stale test data)
+    if (d < PLAN_START) { delete data.daily[key]; continue; }
     if (d >= today) continue;
     if (!day.slots) continue;
     day.slots.forEach((slot, idx) => {
