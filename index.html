@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Revise">
-<title>Harry's Revision Hub v2.3</title>
+<title>Harry's Revision Hub v2.7</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" href="icon-192.svg">
@@ -411,12 +411,51 @@ h2::before {
 
 .topics-list { list-style: none; display: grid; gap: 0.4rem; }
 .topic-item {
-  display: flex; align-items: center; gap: 0.7rem;
-  padding: 0.7rem 0.9rem;
+  display: grid;
   background: var(--bg-elevated);
   border: 1px solid var(--border);
   border-radius: 8px;
+  overflow: hidden;
 }
+.topic-row {
+  display: flex; align-items: center; gap: 0.7rem;
+  padding: 0.7rem 0.9rem;
+}
+.topic-chevron {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  transition: transform 0.2s;
+  user-select: none;
+}
+.topic-chevron.open { transform: rotate(90deg); }
+.topic-chevron-placeholder { width: 24px; flex-shrink: 0; }
+.topic-links {
+  display: none;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.9rem 0.7rem 2.7rem;
+  border-top: 1px solid var(--border);
+  padding-top: 0.5rem;
+  background: rgba(0,0,0,0.15);
+}
+.topic-links.open { display: flex; }
+.topic-link {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0.45rem 0.65rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+}
+.topic-link-name { font-weight: 500; }
+.topic-link-desc { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.1rem; }
+.topic-link-arrow { color: var(--text-muted); margin-left: 0.5rem; }
 .topic-checkbox {
   width: 18px; height: 18px;
   border: 2px solid var(--border-bright);
@@ -427,7 +466,7 @@ h2::before {
 .topic-checkbox.checked { background: var(--subject-color, var(--accent)); border-color: var(--subject-color, var(--accent)); }
 .topic-checkbox.checked::after { content: '✓'; color: var(--bg-base); font-weight: 700; font-size: 0.85rem; }
 .topic-label { flex: 1; font-size: 0.9rem; color: var(--text-primary); }
-.topic-checkbox.checked + .topic-label { color: var(--text-muted); text-decoration: line-through; }
+.topic-checkbox.checked ~ .topic-label { color: var(--text-muted); text-decoration: line-through; }
 
 .resources-list { display: grid; gap: 0.4rem; }
 .resource-link {
@@ -701,7 +740,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-title">harry.revision</div>
-      <span class="version">v2.3</span>
+      <span class="version">v2.7</span>
     </div>
     <div class="header-stats">
       <span class="header-stat">EOY · <strong>29 Jun</strong></span>
@@ -775,7 +814,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
     <div class="stat-card">
       <div class="stat-label">Phase</div>
       <div class="stat-value mono" id="phase-name">RAMP</div>
-      <div class="stat-sub" id="phase-dates">18-31 May</div>
+      <div class="stat-sub" id="phase-dates">20 May – 2 Jun</div>
     </div>
   </div>
 
@@ -825,7 +864,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 </main>
 
 <footer>
-  Built for Harry · v2.3 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
+  Built for Harry · v2.7 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
 </footer>
 
 <!-- Timer Completion Modal -->
@@ -859,9 +898,9 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 // ============ CONSTANTS ============
 
 const EXAM_START = new Date('2026-06-29');
-const PHASE_1_END = new Date('2026-05-31');
+const PHASE_1_END = new Date('2026-06-02');
 const PHASE_2_END = new Date('2026-06-28');
-const PLAN_START = new Date('2026-05-18');
+const PLAN_START = new Date('2026-05-20');
 
 function todayDate() {
   const d = new Date();
@@ -911,21 +950,83 @@ const SUBJECTS = {
     teacherNote: 'Steady progress. Basic Python (T2) and binary number system (T3) developed soundly. Currently working on cyber security. Benefits from step-by-step guidance but beginning to show more independence.',
     examInfo: { 'GCSE Board': 'OCR J277', 'Likely Y9 topics': 'Python, Binary, Cyber Security', 'Format': 'Awaiting school', 'Y10 onwards': '2 papers, 1h30 each' },
     topics: [
-      'Python: variables and data types',
-      'Python: input/output and casting',
-      'Python: if/elif/else statements',
-      'Python: while and for loops',
-      'Python: code tracing practice',
-      'Binary: place values (128-1)',
-      'Binary: decimal ↔ binary conversion',
-      'Binary: addition with overflow',
-      'Binary: binary shifts (×2, ÷2)',
-      'Hexadecimal: hex ↔ binary ↔ decimal',
-      'Character encoding: ASCII and Unicode',
-      'Cyber security: malware types',
-      'Cyber security: social engineering',
-      'Cyber security: protection methods',
-      'Cyber security: UK laws (CMA, GDPR)'
+      { name: 'Python: variables and data types', links: [
+        { name: "Harry's Study Hub: Python module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Variables', desc: 'KS3 explanation', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'W3Schools: Python variables', desc: 'Reference + examples', url: 'https://www.w3schools.com/python/python_variables.asp' },
+        { name: 'W3Schools: Python data types', desc: 'int, float, str, bool', url: 'https://www.w3schools.com/python/python_datatypes.asp' }
+      ]},
+      { name: 'Python: input/output and casting', links: [
+        { name: "Harry's Study Hub: Python module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'W3Schools: Python input', desc: 'input() function', url: 'https://www.w3schools.com/python/ref_func_input.asp' },
+        { name: 'W3Schools: Type casting', desc: 'int(), str(), float()', url: 'https://www.w3schools.com/python/python_casting.asp' }
+      ]},
+      { name: 'Python: if/elif/else statements', links: [
+        { name: "Harry's Study Hub: Python module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Selection', desc: 'Conditional logic', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'W3Schools: Python if/else', desc: 'Syntax + examples', url: 'https://www.w3schools.com/python/python_conditions.asp' }
+      ]},
+      { name: 'Python: while and for loops', links: [
+        { name: "Harry's Study Hub: Python module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Iteration', desc: 'Loop concepts', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'W3Schools: while loops', desc: 'Syntax + breaks', url: 'https://www.w3schools.com/python/python_while_loops.asp' },
+        { name: 'W3Schools: for loops', desc: 'range() included', url: 'https://www.w3schools.com/python/python_for_loops.asp' }
+      ]},
+      { name: 'Python: code tracing practice', links: [
+        { name: 'Python Tutor', desc: 'Step through code visually', url: 'https://pythontutor.com' },
+        { name: 'Isaac Computer Science: Tracing', desc: 'GCSE practice', url: 'https://isaaccomputerscience.org' },
+        { name: '101 Computing: Python challenges', desc: 'Trace + predict output', url: 'https://www.101computing.net/category/python/' }
+      ]},
+      { name: 'Binary: place values (128-1)', links: [
+        { name: "Harry's Study Hub: Binary module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Binary', desc: 'KS3 representation', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Binary', desc: 'Clear explanation', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Binary: decimal ↔ binary conversion', links: [
+        { name: "Harry's Study Hub: Binary module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Converting', desc: 'Step-by-step', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'Craig n Dave: Binary conversion', desc: 'OCR J277 video', url: 'https://student.craigndave.org' }
+      ]},
+      { name: 'Binary: addition with overflow', links: [
+        { name: "Harry's Study Hub: Binary module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Binary arithmetic', desc: 'Addition + overflow', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Binary addition', desc: 'Worked examples', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Binary: binary shifts (×2, ÷2)', links: [
+        { name: "Harry's Study Hub: Binary module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Binary shifts', desc: 'Left + right shifts', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Binary shifts', desc: 'Practical examples', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Hexadecimal: hex ↔ binary ↔ decimal', links: [
+        { name: "Harry's Study Hub: Binary module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Hexadecimal', desc: 'Conversion methods', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Hexadecimal', desc: 'Why hex is useful', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Character encoding: ASCII and Unicode', links: [
+        { name: "Harry's Study Hub: Data rep module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Character sets', desc: 'ASCII vs Unicode', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Character sets', desc: 'Encoding explained', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Cyber security: malware types', links: [
+        { name: "Harry's Study Hub: Cyber security module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Malware', desc: 'Virus, worm, trojan, etc.', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Malware', desc: 'All malware types', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Cyber security: social engineering', links: [
+        { name: "Harry's Study Hub: Cyber security module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Social engineering', desc: 'Phishing, vishing, etc.', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Social engineering', desc: 'Attack types', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Cyber security: protection methods', links: [
+        { name: "Harry's Study Hub: Cyber security module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Protecting systems', desc: 'Firewall, antivirus, etc.', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Protection methods', desc: 'Layered defence', url: 'https://www.csnewbs.com' }
+      ]},
+      { name: 'Cyber security: UK laws (CMA, GDPR)', links: [
+        { name: "Harry's Study Hub: Cyber security module", desc: 'Your custom app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
+        { name: 'BBC Bitesize: Legislation', desc: 'CMA, DPA, copyright', url: 'https://www.bbc.co.uk/bitesize/subjects/zvc9q6f' },
+        { name: 'CSNewbs: Computer Misuse Act', desc: 'CMA 1990 explained', url: 'https://www.csnewbs.com' }
+      ]}
     ],
     resources: [
       { name: "Harry's Study Hub", desc: 'Your custom revision app', url: 'https://thephatphox.github.io/HJAHGCSE/' },
@@ -946,15 +1047,51 @@ const SUBJECTS = {
     teacherNote: 'A lively and motivated student who handles Higher-tier assessments well, though confidence sometimes wanes. Focus on refining exam technique, particularly conciseness of responses. Complete extra Educake questions to strengthen long-term memory.',
     examInfo: { 'Format': '3 papers (Bio, Chem, Phys)', 'Each': '40 marks · 40 mins', 'Topics': '9 total', 'Pathway': 'Triple/combined' },
     topics: [
-      'BIO: Genes, evolution and inheritance',
-      'BIO: Cell biology (B1)',
-      'BIO: Organisation (B2)',
-      'CHEM: Periodic Table and Atomic structure (C1)',
-      'CHEM: Chemical bonding (C2)',
-      'PHYS: Magnetism and electromagnetism',
-      'PHYS: Energy (P1)',
-      'PHYS: Particle model of matter (P3)',
-      'PHYS: Atoms and radiation (P4)'
+      { name: 'BIO: Genes, evolution and inheritance', links: [
+        { name: 'BBC Bitesize: Inheritance & genetics', desc: 'KS3 Biology', url: 'https://www.bbc.co.uk/bitesize/topics/zpffr82' },
+        { name: 'FreeScienceLessons: Inheritance', desc: 'YouTube playlist', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Seneca: Genetics', desc: 'Interactive revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'BIO: Cell biology (B1)', links: [
+        { name: 'BBC Bitesize: Cell Biology', desc: 'B1', url: 'https://www.bbc.co.uk/bitesize/topics/zb739j6' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'B1 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Seneca: Cell Biology', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'BIO: Organisation (B2)', links: [
+        { name: 'BBC Bitesize: Organisation', desc: 'B2', url: 'https://www.bbc.co.uk/bitesize/topics/z9q7vk7' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'B2 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Educake', desc: 'Practice questions', url: 'https://www.educake.co.uk' }
+      ]},
+      { name: 'CHEM: Periodic Table and Atomic structure (C1)', links: [
+        { name: 'BBC Bitesize: Periodic Table', desc: 'C1', url: 'https://www.bbc.co.uk/bitesize/topics/zwsfgwx' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'C1 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Seneca: Atomic Structure', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'CHEM: Chemical bonding (C2)', links: [
+        { name: 'BBC Bitesize: Chemical Bonding', desc: 'C2', url: 'https://www.bbc.co.uk/bitesize/topics/zypsgwx' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'C2 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Educake', desc: 'Practice questions', url: 'https://www.educake.co.uk' }
+      ]},
+      { name: 'PHYS: Magnetism and electromagnetism', links: [
+        { name: 'BBC Bitesize: Magnetism', desc: 'Electromagnets + motor effect', url: 'https://www.bbc.co.uk/bitesize/guides/z3g8d2p/revision/1' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'Physics videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Seneca: Magnetism', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'PHYS: Energy (P1)', links: [
+        { name: 'BBC Bitesize: Energy', desc: 'P1', url: 'https://www.bbc.co.uk/bitesize/topics/zgy39j6' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'P1 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Educake', desc: 'Practice questions', url: 'https://www.educake.co.uk' }
+      ]},
+      { name: 'PHYS: Particle model of matter (P3)', links: [
+        { name: 'BBC Bitesize: Particle Model', desc: 'P3', url: 'https://www.bbc.co.uk/bitesize/topics/zsfgrj6' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'P3 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Seneca: Particle Model', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'PHYS: Atoms and radiation (P4)', links: [
+        { name: 'BBC Bitesize: Atoms and Radiation', desc: 'P4', url: 'https://www.bbc.co.uk/bitesize/topics/zsjwbqt' },
+        { name: 'FreeScienceLessons (YouTube)', desc: 'P4 videos', url: 'https://www.youtube.com/@freesciencelessons' },
+        { name: 'Educake', desc: 'Practice questions', url: 'https://www.educake.co.uk' }
+      ]}
     ],
     resources: [
       { name: 'Seneca Learning', desc: 'Free, interactive (school recommended)', url: 'https://app.senecalearning.com' },
@@ -977,15 +1114,67 @@ const SUBJECTS = {
     teacherNote: 'Currently working below the expected level. Works well but can become distracted. Practise geographical skills on the Turing House School website, especially data interpretation and structured written responses.',
     examInfo: { 'Format': '1 paper', 'Marks': '45', 'Topics': '7+ areas', 'Status': 'Below target' },
     topics: [
-      'Population', 'Overpopulation', 'Challenges of managing population',
-      'Hazards: distribution of earthquakes and volcanoes',
-      'Plate boundaries', 'Earthquake Case Study – Haiti 2010',
-      'Glaciation: key terms', 'Glacial landforms', 'Glacial processes',
-      'Earning a living: employment sectors',
-      'Changes in employment structure', 'Doncaster case study',
-      'UK Resources: key terms and global distribution',
-      'Food: food miles and production',
-      'Africa: causes of underdevelopment'
+      { name: 'Population', links: [
+        { name: 'BBC Bitesize: Population', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zw3pb82' },
+        { name: 'Internet Geography: Population Pyramids', desc: 'Age-sex structure', url: 'https://www.internetgeography.net/population-pyramids-in-geography/' },
+        { name: 'Internet Geography: Natural Change', desc: 'Birth/death rates', url: 'https://www.internetgeography.net/igcse-geography/population-and-settlement-igcse-geography/natural-population-change/' }
+      ]},
+      { name: 'Overpopulation', links: [
+        { name: 'BBC Bitesize: Population', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zw3pb82' },
+        { name: 'Internet Geography', desc: 'Topic index', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Challenges of managing population', links: [
+        { name: 'BBC Bitesize: Population', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zw3pb82' },
+        { name: 'Internet Geography', desc: 'Topic index', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Hazards: distribution of earthquakes and volcanoes', links: [
+        { name: 'BBC Bitesize: Plate Margins', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zycb9qt/revision/1' },
+        { name: 'Internet Geography', desc: 'Hazards topic index', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Plate boundaries', links: [
+        { name: 'BBC Bitesize: Plate Margins', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zycb9qt/revision/1' },
+        { name: 'Internet Geography', desc: 'Hazards topic index', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Earthquake Case Study – Haiti 2010', links: [
+        { name: 'Internet Geography: Haiti', desc: 'Full case study', url: 'https://www.internetgeography.net/topics/haiti-earthquake-2010/' },
+        { name: 'BBC Bitesize: Plate Margins', desc: 'Background', url: 'https://www.bbc.co.uk/bitesize/guides/zycb9qt/revision/1' }
+      ]},
+      { name: 'Glaciation: key terms', links: [
+        { name: 'Internet Geography: What is glaciation?', desc: 'Intro', url: 'https://www.internetgeography.net/geotopics/what-is-glaciation/' },
+        { name: 'Internet Geography: Glaciation', desc: 'Topic hub', url: 'https://www.internetgeography.net/topics/glaciation/' }
+      ]},
+      { name: 'Glacial landforms', links: [
+        { name: 'Internet Geography: Glaciation', desc: 'Topic hub', url: 'https://www.internetgeography.net/topics/glaciation/' },
+        { name: 'BBC Bitesize: Glacial Processes', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zsm6fg8/revision/1' }
+      ]},
+      { name: 'Glacial processes', links: [
+        { name: 'BBC Bitesize: Glacial Processes', desc: 'AQA GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zsm6fg8/revision/1' },
+        { name: 'Internet Geography: Glaciation', desc: 'Topic hub', url: 'https://www.internetgeography.net/topics/glaciation/' }
+      ]},
+      { name: 'Earning a living: employment sectors', links: [
+        { name: 'BBC Bitesize: Types of Industry', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zkhrhyc' },
+        { name: 'Internet Geography: Glacial economies', desc: 'Upland areas', url: 'https://www.internetgeography.net/topics/economic-activities-in-glaciated-upland-areas/' }
+      ]},
+      { name: 'Changes in employment structure', links: [
+        { name: 'BBC Bitesize: Types of Industry', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zkhrhyc' },
+        { name: 'Internet Geography', desc: 'Economy topic index', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Doncaster case study', links: [
+        { name: 'BBC Bitesize: Types of Industry', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zkhrhyc' },
+        { name: 'Internet Geography', desc: 'UK case studies', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'UK Resources: key terms and global distribution', links: [
+        { name: 'BBC Bitesize KS3 Geography', desc: 'Subject root', url: 'https://www.bbc.co.uk/bitesize/subjects/zrw76sg' },
+        { name: 'Internet Geography', desc: 'Resources topic', url: 'https://www.internetgeography.net' }
+      ]},
+      { name: 'Food: food miles and production', links: [
+        { name: 'Internet Geography: Food Miles', desc: 'Local sourcing', url: 'https://www.internetgeography.net/topics/food-miles/' },
+        { name: 'BBC Bitesize KS3 Geography', desc: 'Subject root', url: 'https://www.bbc.co.uk/bitesize/subjects/zrw76sg' }
+      ]},
+      { name: 'Africa: causes of underdevelopment', links: [
+        { name: 'BBC Bitesize KS3 Geography', desc: 'Subject root', url: 'https://www.bbc.co.uk/bitesize/subjects/zrw76sg' },
+        { name: 'Internet Geography', desc: 'Development topic', url: 'https://www.internetgeography.net' }
+      ]}
     ],
     resources: [
       { name: 'BBC Bitesize: Population', desc: 'KS3', url: 'https://www.bbc.co.uk/bitesize/topics/zw3pb82' },
@@ -1005,14 +1194,81 @@ const SUBJECTS = {
     teacherNote: 'Excellent attitude, working above target. Attempt Parallel online tasks released weekly. Revisit DrFrostMaths course page. Attempt exam-level questions for GCSE preparation.',
     examInfo: { 'Format': '2 papers', 'Non-calc': '50 mins', 'Calc': '50 mins', 'Tier': 'Higher', 'Target qual': 'AQA L2 Further Maths' },
     topics: [
-      'Number: surds and indices', 'Algebra: factorising quadratics',
-      'Algebra: simultaneous equations', 'Algebra: rearranging formulas',
-      'Algebra: solving inequalities', 'Geometry: angle facts and proofs',
-      'Geometry: Pythagoras and trigonometry', 'Ratio, proportion and rates of change',
-      'Probability: tree diagrams', 'Statistics: averages and spread',
-      'Functions and graphs', 'Sequences (linear and quadratic)',
-      'Vectors (intro)', 'Circle theorems (intro)',
-      'Problem solving: Parallel weekly tasks'
+      { name: 'Number: surds and indices', links: [
+        { name: 'Corbettmaths: Surds', desc: 'Video 305 + practice', url: 'https://corbettmaths.com/2019/08/29/surds-practice-questions/' },
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Algebra: factorising quadratics', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Search "factorising quadratics"', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Algebra: simultaneous equations', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Linear + advanced (V295/V298)', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Algebra: rearranging formulas', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Algebra: solving inequalities', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Geometry: angle facts and proofs', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' },
+        { name: 'Maths Genie', desc: 'Practice', url: 'https://www.mathsgenie.co.uk' }
+      ]},
+      { name: 'Geometry: Pythagoras and trigonometry', links: [
+        { name: 'Corbettmaths: Pythagoras with Surds', desc: 'Video tutorial', url: 'https://corbettmaths.com/2022/04/03/pythagoras-surds-video/' },
+        { name: 'Corbettmaths: Contents', desc: 'Pythag + trig index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' }
+      ]},
+      { name: 'Ratio, proportion and rates of change', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' },
+        { name: 'Maths Genie', desc: 'Practice', url: 'https://www.mathsgenie.co.uk' }
+      ]},
+      { name: 'Probability: tree diagrams', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Statistics: averages and spread', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Functions and graphs', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Sequences (linear and quadratic)', links: [
+        { name: 'Corbettmaths: Further Maths', desc: 'Linear+quad sequences', url: 'https://corbettmaths.com/more/further-maths/' },
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Vectors (intro)', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Circle theorems (intro)', links: [
+        { name: 'Corbettmaths: Contents', desc: 'Full topic index', url: 'https://corbettmaths.com/contents/' },
+        { name: 'Maths Genie', desc: 'GCSE practice', url: 'https://www.mathsgenie.co.uk' },
+        { name: 'DrFrostMaths', desc: 'School platform', url: 'https://www.drfrostmaths.com' }
+      ]},
+      { name: 'Problem solving: Parallel weekly tasks', links: [
+        { name: 'Parallel Maths', desc: 'Weekly problem-solving tasks', url: 'https://parallel.org.uk' },
+        { name: 'Mr Barton: AQA L2 Further Maths', desc: 'Forward planning', url: 'https://www.mrbartonmaths.com/exams/aqa-level-2-certificate-in-further-mathematics/' },
+        { name: 'Algebra Power-up (YouTube)', desc: 'School recommended', url: 'https://youtu.be/OxNSxvJb6fs' }
+      ]}
     ],
     resources: [
       { name: 'DrFrostMaths', desc: 'Main school resource', url: 'https://www.drfrostmaths.com' },
@@ -1031,11 +1287,46 @@ const SUBJECTS = {
     teacherNote: 'Good term, positive attitude. Works hard on written tasks. To improve: develop single-word analysis and explore writers\' intentions in more depth.',
     examInfo: { 'Format': '1 paper, 2 sections', 'Section 1': 'Reading', 'Section 2': 'Creative writing', 'Length': 'Double lesson' },
     topics: [
-      'Reading: making inferences', 'Reading: analysing language techniques',
-      'Reading: analysing structure', 'Reading: explaining effects on readers',
-      'Reading: evaluating texts', 'Writing: planning and structuring',
-      'Writing: techniques to influence reader', 'Writing: precise word choices',
-      'Writing: accurate punctuation', 'Writing: proofreading and editing'
+      { name: 'Reading: making inferences', links: [
+        { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Inference videos', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Reading: analysing language techniques', links: [
+        { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Language analysis', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Reading: analysing structure', links: [
+        { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Structural analysis', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Reading: explaining effects on readers', links: [
+        { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Effect on reader', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Reading: evaluating texts', links: [
+        { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Evaluation techniques', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Writing: planning and structuring', links: [
+        { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Writing technique', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Writing: techniques to influence reader', links: [
+        { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Persuasive techniques', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Writing: precise word choices', links: [
+        { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+        { name: 'Sparx Reading', desc: 'Vocabulary building', url: 'https://www.sparxreading.com' }
+      ]},
+      { name: 'Writing: accurate punctuation', links: [
+        { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Punctuation videos', url: 'https://www.youtube.com/@mrbruff' }
+      ]},
+      { name: 'Writing: proofreading and editing', links: [
+        { name: 'BBC Bitesize: Descriptive Writing', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/zwcjpbk' },
+        { name: 'Mr Bruff (YouTube)', desc: 'Editing technique', url: 'https://www.youtube.com/@mrbruff' }
+      ]}
     ],
     resources: [
       { name: 'BBC Bitesize: Analysis', desc: 'KS3 English', url: 'https://www.bbc.co.uk/bitesize/topics/z2yyjty' },
@@ -1052,13 +1343,58 @@ const SUBJECTS = {
     teacherNote: 'Excellent student, high engagement and enthusiasm. Very strong grasp of vocabulary and grammar. Revise all vocabulary from GCSE modules 1-3.',
     examInfo: { 'Format': 'Reading, listening, writing', 'M1': 'Holidays', 'M2': 'School', 'M3': 'Family/tech', 'Writing': '3 tenses + opinions' },
     topics: [
-      'Module 1: Holiday vocabulary', 'Module 1: Past tense (preterite)',
-      'Module 2: School subjects and opinions', 'Module 2: Daily routine',
-      'Module 3: Family vocabulary', 'Module 3: Friendship vocabulary',
-      'Module 3: Technology vocabulary', 'Module 3: Reading habits',
-      'Grammar: Present tense', 'Grammar: Preterite tense',
-      'Grammar: Near future (ir a + infinitive)', 'Grammar: Opinions with reasons',
-      'Skill: Photo description structure'
+      { name: 'Module 1: Holiday vocabulary', links: [
+        { name: 'Quizlet: Viva Module 1', desc: 'Holidays flashcards', url: 'https://quizlet.com/search?query=viva+module+1+las+vacaciones' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Module 1: Past tense (preterite)', links: [
+        { name: 'Quizlet: Viva Module 1', desc: 'Vocab + grammar', url: 'https://quizlet.com/search?query=viva+module+1+las+vacaciones' },
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Grammar reference', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' }
+      ]},
+      { name: 'Module 2: School subjects and opinions', links: [
+        { name: 'Quizlet: Viva Module 2', desc: 'School flashcards', url: 'https://quizlet.com/search?query=viva+module+2+mi+vida' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Module 2: Daily routine', links: [
+        { name: 'Quizlet: Viva Module 2', desc: 'School flashcards', url: 'https://quizlet.com/search?query=viva+module+2+mi+vida' },
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Daily routine', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' }
+      ]},
+      { name: 'Module 3: Family vocabulary', links: [
+        { name: 'BBC Bitesize: Family Spanish', desc: 'Module 3', url: 'https://www.bbc.co.uk/bitesize/topics/zxdvxyc' },
+        { name: 'Quizlet: Viva Module 3', desc: 'Family/tech', url: 'https://quizlet.com/search?query=viva+module+3+mi+gente' }
+      ]},
+      { name: 'Module 3: Friendship vocabulary', links: [
+        { name: 'Quizlet: Viva Module 3', desc: 'Family/tech', url: 'https://quizlet.com/search?query=viva+module+3+mi+gente' },
+        { name: 'BBC Bitesize: Family Spanish', desc: 'Module 3', url: 'https://www.bbc.co.uk/bitesize/topics/zxdvxyc' }
+      ]},
+      { name: 'Module 3: Technology vocabulary', links: [
+        { name: 'Quizlet: Viva Module 3', desc: 'Family/tech', url: 'https://quizlet.com/search?query=viva+module+3+mi+gente' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Module 3: Reading habits', links: [
+        { name: 'Quizlet: Viva Module 3', desc: 'Family/tech', url: 'https://quizlet.com/search?query=viva+module+3+mi+gente' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Grammar: Present tense', links: [
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Grammar reference', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva grammar drills', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Grammar: Preterite tense', links: [
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Grammar reference', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva grammar drills', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Grammar: Near future (ir a + infinitive)', links: [
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Grammar reference', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' },
+        { name: 'Active Learn (Pearson)', desc: 'Viva grammar drills', url: 'https://www.activelearnprimary.co.uk' }
+      ]},
+      { name: 'Grammar: Opinions with reasons', links: [
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Grammar reference', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' },
+        { name: 'Blooket', desc: 'Gamified vocab practice', url: 'https://blooket.com' }
+      ]},
+      { name: 'Skill: Photo description structure', links: [
+        { name: 'Active Learn (Pearson)', desc: 'Viva skills practice', url: 'https://www.activelearnprimary.co.uk' },
+        { name: 'BBC Bitesize KS3 Spanish', desc: 'Speaking technique', url: 'https://www.bbc.co.uk/bitesize/subjects/zfckjxs' }
+      ]}
     ],
     resources: [
       { name: 'Active Learn (Pearson)', desc: 'Viva course platform', url: 'https://www.activelearnprimary.co.uk' },
@@ -1077,12 +1413,54 @@ const SUBJECTS = {
     teacherNote: 'Good commitment. Positive class participation, written work generally well organised. To develop: include more detailed examples and evidence to strengthen explanations.',
     examInfo: { 'Topic': 'Christianity', 'Format': '5 questions', 'Marks': '1+2+4+5+12', 'Total': '24' },
     topics: [
-      'Nature of God: omnipotent, omniscient, benevolent',
-      'The Trinity', 'Creation: Genesis 1', 'The Incarnation',
-      'The crucifixion and resurrection', 'Salvation: atonement and grace',
-      'Worship: liturgical, non-liturgical, private', 'Prayer',
-      'Sacraments: baptism and eucharist', 'Pilgrimage: Lourdes and Iona',
-      'Christmas and Easter celebrations', 'The role of the church'
+      { name: 'Nature of God: omnipotent, omniscient, benevolent', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'The Trinity', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Creation: Genesis 1', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'The Incarnation', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'The crucifixion and resurrection', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Salvation: atonement and grace', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Worship: liturgical, non-liturgical, private', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Prayer', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Sacraments: baptism and eucharist', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Pilgrimage: Lourdes and Iona', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Christmas and Easter celebrations', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'The role of the church', links: [
+        { name: 'BBC Bitesize AQA Christianity', desc: 'Practices', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: AQA RS Christianity', desc: 'Free revision', url: 'https://app.senecalearning.com' }
+      ]}
     ],
     resources: [
       { name: 'Bromcom Knowledge Organiser', desc: 'School-provided', url: '#' },
@@ -1098,14 +1476,58 @@ const SUBJECTS = {
     teacherNote: 'Good knowledge of twentieth-century history. To progress: take more active role, contribute more regularly, show greater independence.',
     examInfo: { 'Format': '40-min paper', 'Q1': 'Explain consequence ×2', 'Q2': 'Analytical narrative', 'Q3': 'Importance of event' },
     topics: [
-      'The Grand Alliance', 'Tehran, Yalta and Potsdam conferences',
-      'Development of the atomic bomb', 'Long and Novikov telegrams',
-      'Soviet satellite states in Eastern Europe',
-      'Truman Doctrine and Marshall Plan',
-      'Cominform (1947) and Comecon (1949)',
-      'Berlin: division into zones', 'Berlin Crisis 1948-49',
-      'Formation of FRG and GDR', 'The arms race',
-      'NATO and Warsaw Pact', 'Hungarian Uprising'
+      { name: 'The Grand Alliance', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Tehran, Yalta and Potsdam conferences', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Development of the atomic bomb', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Long and Novikov telegrams', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Soviet satellite states in Eastern Europe', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Truman Doctrine and Marshall Plan', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Cominform (1947) and Comecon (1949)', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Berlin: division into zones', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Berlin Crisis 1948-49', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Formation of FRG and GDR', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'The arms race', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'NATO and Warsaw Pact', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]},
+      { name: 'Hungarian Uprising', links: [
+        { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
+        { name: 'Seneca: Superpower Relations', desc: 'Free GCSE revision', url: 'https://app.senecalearning.com' }
+      ]}
     ],
     resources: [
       { name: 'BBC Bitesize: Cold War Origins', desc: 'Edexcel GCSE', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
@@ -1120,10 +1542,34 @@ const SUBJECTS = {
     teacherNote: 'Working below target. Satisfactory attitude — benefit from more effort. Use feedback to improve performances and compositions.',
     examInfo: { 'Format': 'Online listening quiz', 'Type': 'Multiple choice', 'Based on': 'Recorded extracts' },
     topics: [
-      'Musical elements vocabulary', 'Texture (Pachelbel\'s Canon)',
-      'EDM composition', 'Melody and harmony in film music',
-      'Game music composition', 'Recognising instruments by ear',
-      'Tempo, dynamics, articulation'
+      { name: 'Musical elements vocabulary', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Elements + theory', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'Texture (Pachelbel\'s Canon)', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Texture topic', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'EDM composition', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Composition topic', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'Melody and harmony in film music', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Film music', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'Game music composition', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Composition topic', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'Recognising instruments by ear', links: [
+        { name: 'Focus on Sound', desc: 'Listening practice', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Instruments', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]},
+      { name: 'Tempo, dynamics, articulation', links: [
+        { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' },
+        { name: 'BBC Bitesize KS3 Music', desc: 'Elements + theory', url: 'https://www.bbc.co.uk/bitesize/subjects/zmsvr82' }
+      ]}
     ],
     resources: [
       { name: 'Focus on Sound', desc: 'School-recommended platform', url: 'https://www.focusonsound.com' }
@@ -1704,6 +2150,28 @@ function toggleTopic(subjectKey, topicIndex) {
   if (currentModalSubject) openSubject(currentModalSubject, true);
 }
 
+// Track which topic link-sections are expanded so re-renders preserve them
+const expandedTopicLinks = new Set();
+function toggleTopicLinks(subjectKey, topicIndex) {
+  const id = `${subjectKey}-${topicIndex}`;
+  const linksEl = document.getElementById(`links-${id}`);
+  const chevEl = document.getElementById(`chev-${id}`);
+  if (!linksEl) return;
+  const isOpen = linksEl.classList.toggle('open');
+  if (chevEl) chevEl.classList.toggle('open', isOpen);
+  if (isOpen) expandedTopicLinks.add(id);
+  else expandedTopicLinks.delete(id);
+}
+// Re-apply expanded state after openSubject re-renders the modal body
+function restoreExpandedTopicLinks() {
+  expandedTopicLinks.forEach(id => {
+    const linksEl = document.getElementById(`links-${id}`);
+    const chevEl = document.getElementById(`chev-${id}`);
+    if (linksEl) linksEl.classList.add('open');
+    if (chevEl) chevEl.classList.add('open');
+  });
+}
+
 function getTopicProgress(key) {
   const data = loadData();
   if (!data.topics[key]) return { done: 0, total: SUBJECTS[key].topics.length };
@@ -1788,14 +2256,14 @@ function renderPhase() {
     badge.textContent = 'Phase 1: Ramp-in';
     desc.innerHTML = '<strong>1h 15m weekdays</strong>, 2h weekend days';
     pn.textContent = 'RAMP';
-    pd.textContent = '18-31 May';
+    pd.textContent = '20 May – 2 Jun';
     wh.textContent = '10h';
   } else if (phase === 2) {
     badge.classList.add('phase-2');
     badge.textContent = 'Phase 2: Build';
     desc.innerHTML = '<strong>1h 30m–1h 45m weekdays</strong>, 3h 15m weekend days';
     pn.textContent = 'BUILD';
-    pd.textContent = '1-28 Jun';
+    pd.textContent = '3-28 Jun';
     wh.textContent = '14.5h';
   } else {
     badge.classList.add('phase-3');
@@ -1956,6 +2424,8 @@ let currentModalSubject = null;
 
 function openSubject(key, keepScroll = false) {
   const subj = SUBJECTS[key];
+  // Clear expanded topic-link state when opening a different subject
+  if (currentModalSubject !== key) expandedTopicLinks.clear();
   currentModalSubject = key;
   const modal = document.getElementById('modal');
   const overlay = document.getElementById('modal-overlay');
@@ -1973,9 +2443,33 @@ function openSubject(key, keepScroll = false) {
 
   const topicsHtml = subj.topics.map((topic, i) => {
     const checked = topicProgress[i];
+    // Topics can be strings (legacy) or objects { name, links }
+    const isObj = typeof topic === 'object' && topic !== null;
+    const name = isObj ? topic.name : topic;
+    const links = isObj && Array.isArray(topic.links) ? topic.links : [];
+    const hasLinks = links.length > 0;
+    const chevron = hasLinks
+      ? `<span class="topic-chevron" onclick="toggleTopicLinks('${key}', ${i})" id="chev-${key}-${i}">▶</span>`
+      : `<span class="topic-chevron-placeholder"></span>`;
+    const linksHtml = hasLinks ? `
+      <div class="topic-links" id="links-${key}-${i}">
+        ${links.map(l => `
+          <a href="${l.url}" target="_blank" rel="noopener" class="topic-link">
+            <div>
+              <div class="topic-link-name">${l.name}</div>
+              ${l.desc ? `<div class="topic-link-desc">${l.desc}</div>` : ''}
+            </div>
+            <span class="topic-link-arrow">→</span>
+          </a>
+        `).join('')}
+      </div>` : '';
     return `<li class="topic-item">
-      <div class="topic-checkbox ${checked ? 'checked' : ''}" onclick="toggleTopic('${key}', ${i})"></div>
-      <span class="topic-label">${topic}</span>
+      <div class="topic-row">
+        <div class="topic-checkbox ${checked ? 'checked' : ''}" onclick="toggleTopic('${key}', ${i})"></div>
+        <span class="topic-label">${name}</span>
+        ${chevron}
+      </div>
+      ${linksHtml}
     </li>`;
   }).join('');
 
@@ -2004,6 +2498,8 @@ function openSubject(key, keepScroll = false) {
   `;
 
   overlay.classList.add('active');
+  // Re-apply any previously-expanded topic link sections (preserved across re-renders)
+  restoreExpandedTopicLinks();
   if (!keepScroll) {
     document.body.style.overflow = 'hidden';
     document.querySelector('.modal').scrollTop = 0;
