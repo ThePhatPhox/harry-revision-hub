@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Revise">
-<title>Harry's Revision Hub v2.7</title>
+<title>Harry's Revision Hub v2.8</title>
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" href="icon-192.svg">
@@ -740,7 +740,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
   <div class="header-inner">
     <div class="brand">
       <div class="brand-title">harry.revision</div>
-      <span class="version">v2.7</span>
+      <span class="version">v2.8</span>
     </div>
     <div class="header-stats">
       <span class="header-stat">EOY · <strong>29 Jun</strong></span>
@@ -864,7 +864,7 @@ footer a { color: var(--text-secondary); text-decoration: none; }
 </main>
 
 <footer>
-  Built for Harry · v2.7 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
+  Built for Harry · v2.8 PWA · <a href="#" onclick="resetProgress(); return false;">Reset</a> · <a href="#" onclick="forceReschedule(); return false;">Force reschedule</a>
 </footer>
 
 <!-- Timer Completion Modal -->
@@ -1190,9 +1190,9 @@ const SUBJECTS = {
     name: 'Mathematics', color: 'var(--maths)', priority: 'high', priorityLabel: 'Stretch',
     rescheduleWeight: 3,
     weeklyTime: '1h 15m', weeklyTimeP2: '1h 45m',
-    summary: 'Above target. Higher tier confirmed. Goal: AQA Level 2 Further Maths positioning. Focus on algebraic reasoning.',
+    summary: 'Above target. Edexcel 1MA1 Higher tier confirmed. Strong algebraic reasoning. Possible AQA L2 Further Maths route in Y10/11.',
     teacherNote: 'Excellent attitude, working above target. Attempt Parallel online tasks released weekly. Revisit DrFrostMaths course page. Attempt exam-level questions for GCSE preparation.',
-    examInfo: { 'Format': '2 papers', 'Non-calc': '50 mins', 'Calc': '50 mins', 'Tier': 'Higher', 'Target qual': 'AQA L2 Further Maths' },
+    examInfo: { 'Board': 'Edexcel 1MA1', 'Tier': 'Higher', 'Format': '2 papers', 'Non-calc': '50 mins', 'Calc': '50 mins', 'Stretch': 'AQA L2 Further Maths' },
     topics: [
       { name: 'Number: surds and indices', links: [
         { name: 'Corbettmaths: Surds', desc: 'Video 305 + practice', url: 'https://corbettmaths.com/2019/08/29/surds-practice-questions/' },
@@ -1274,7 +1274,7 @@ const SUBJECTS = {
       { name: 'DrFrostMaths', desc: 'Main school resource', url: 'https://www.drfrostmaths.com' },
       { name: 'Parallel Maths', desc: 'Weekly problem-solving', url: 'https://parallel.org.uk' },
       { name: 'Corbett Maths', desc: 'Topic videos', url: 'https://corbettmaths.com' },
-      { name: 'Maths Genie', desc: 'GCSE practice papers', url: 'https://www.mathsgenie.co.uk' },
+      { name: 'Maths Genie: Edexcel 1MA1', desc: 'Higher tier practice papers', url: 'https://www.mathsgenie.co.uk/gcse.html' },
       { name: 'Mr Barton: AQA L2 Further Maths', desc: 'Forward planning', url: 'https://www.mrbartonmaths.com/exams/aqa-level-2-certificate-in-further-mathematics/' },
       { name: 'Algebra Power-up (YouTube)', desc: 'School recommended', url: 'https://youtu.be/OxNSxvJb6fs' }
     ]
@@ -1409,9 +1409,9 @@ const SUBJECTS = {
     name: 'Religious Studies', color: 'var(--rs)', priority: 'medium', priorityLabel: 'Y10 Exam',
     rescheduleWeight: 5,
     weeklyTime: '15 min', weeklyTimeP2: '1 hr',
-    summary: 'Real GCSE — sat in Year 10. AQA 8062 spec. Christianity unit assessed in EOY.',
+    summary: 'Real GCSE — sat in Year 10. AQA 8061D Short Course (Christianity only). Christianity unit assessed in EOY.',
     teacherNote: 'Good commitment. Positive class participation, written work generally well organised. To develop: include more detailed examples and evidence to strengthen explanations.',
-    examInfo: { 'Topic': 'Christianity', 'Format': '5 questions', 'Marks': '1+2+4+5+12', 'Total': '24' },
+    examInfo: { 'Board': 'AQA 8061D', 'Type': 'Short Course', 'Topic': 'Christianity', 'Format': '5 questions', 'Marks': '1+2+4+5+12', 'Total': '24' },
     topics: [
       { name: 'Nature of God: omnipotent, omniscient, benevolent', links: [
         { name: 'BBC Bitesize AQA Christianity', desc: 'Beliefs and teachings', url: 'https://www.bbc.co.uk/bitesize/guides/zqfp34j/revision/1' },
